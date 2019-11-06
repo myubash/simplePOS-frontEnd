@@ -50,7 +50,7 @@ export class Checkout extends Component {
                 })
             }
         })
-        return aaaaaaaaa
+        return sum
     }
     change = async (id, _paid) => {
         try {

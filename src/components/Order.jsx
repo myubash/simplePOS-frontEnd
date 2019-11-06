@@ -1,20 +1,144 @@
 import React, { Component } from 'react'
-import Sidebar from './sidebar/Sidebar'
-import { Row, Col, Card, CardImg, CardTitle, } from 'reactstrap'
+import { Row, Col, Card, CardImg, CardTitle, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 import darwin from '../assets/darwin.png'
 import { Redirect, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { delTableNum } from '../actions/index'
+import Swal from 'sweetalert2'
+import { Transition } from 'react-transition-group'
+
+const duration = 500
+
+const sidebarStyle = {
+    transition: `width ${duration}ms`
+}
+const sidebarTransitionStyles = {
+    entering: { width: 0 },
+    entered: { width: '300px' },
+    exiting: { width: '300px' },
+    exited: { width: 0 }
+}
+const linkStyle = {
+    transition: `opacity ${duration}ms`
+}
+const linkTransitionStyles = {
+    entering: { opacity: 0 },
+    entered: { opacity: 1 },
+    exiting: { opacity: 1 },
+    exited: { opacity: 0 }
+}
+
 
 export class Order extends Component {
     state = {
         arrMenu: [],
         productDetail: [],
         arrOrder: [],
-        tableNum: this.props.num,
+        tableNum: this.props.tableNum,
         qty: 0,
-        modal: false
+        modal: false,
+        isOpen: false
+
+    }
+
+    renderLinks = () => {
+        return <Transition in={this.state.isOpen} timeout={duration}>
+            {(state) => (
+                <div className='mt-2' style={{
+                    ...linkStyle,
+                    ...linkTransitionStyles[state]
+                }}>
+                    <div>
+                        {this.renderOrders()}
+                    </div>
+                </div>
+            )}
+        </Transition>
+    }
+
+    renderOrders = () => {
+        // let { id, customerId, orderDetail, status } = this.state.arrOrder
+        return this.state.arrOrder.map(order => {
+            return (
+                <Row className='container mx-auto'>
+                    <Col xs='11' className='border-bottom border-top border-dark p-0'>
+                        <div className='d-flex py-4'>
+                            <div className='pt-1 ml-2'>
+                                {order.productName}
+                            </div>
+                            <div className='ml-auto pt-1'>
+                                Qty : {order.qty}
+                            </div>
+                            <div className='ml-auto'>
+                                <button className='btn btn-danger' onClick={() => this.delete(order.productId)}>X</button>
+                            </div>
+                        </div>
+                    </Col>
+                </Row>
+            )
+        })
+    }
+    renderConfirmation = () => {
+        return this.state.arrOrder.map(order => {
+            return (
+                <Row className='container mx-auto'>
+                    <Col xs='11' className='border-bottom border-top border-dark p-0'>
+                        <div className='d-flex py-4'>
+                            <div className='pt-1 ml-2'>
+                                {order.productName}
+                            </div>
+                            <div className='ml-auto pt-1'>
+                                Qty : {order.qty}
+                            </div>
+                        </div>
+                    </Col>
+                </Row>
+            )
+        })
+    }
+    delete = (id) => {
+        let array = [...this.state.arrOrder]
+        let index = array.map(function (e) { return e.productId; }).indexOf(id);
+        if (index === -1) return alert('No index')
+        array.splice(index, 1)
+        this.setState({ arrOrder: array })
+    }
+
+    onSubmit = () => {
+        this.toggle()
+        axios.post(
+            'http://localhost:2000/orders',
+            {
+                list: this.state.arrOrder,
+                customerTable: this.props.tableNum,
+                paid: false
+            }
+        )
+            .then(res => {
+                console.log(res)
+                this.props.delTableNum()
+                Swal.fire({
+                    type: 'success',
+                    title: 'Ordered'
+                })
+
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    toggle = () => {
+        this.setState(prevState => ({
+            modal: !prevState.modal
+        }))
+    }
+
+    toggleSidebar = () => {
+        this.setState(prevState => ({
+            isOpen: !prevState.isOpen
+        }))
     }
 
     // this.state.arrorder[?].qty
@@ -90,7 +214,6 @@ export class Order extends Component {
         })
     }
     delDetail = () => {
-        // console.log(this.state.arrOrder)
         this.setState({
             productDetail: []
         })
@@ -219,7 +342,66 @@ export class Order extends Component {
         if (this.props.userName && (this.props.userType === "cashier" || this.props.userType === "waiter") && this.props.tableNum) {
             return (
                 <div className='app' >
-                    <Sidebar onDelArr={this.handleDelArr} order={this.state.arrOrder} tableNum={this.props.tableNum} />
+                    <div className='sidebar-container'>
+                        {
+                            this.state.isOpen === true
+                                ?
+                                <div className='d-flex '>
+                                    <button onClick={this.toggleSidebar} className='btn btn-block btn-primary py-3 mb-2 mx-0 px-0'>Close</button>
+                                </div>
+                                :
+                                <div className='d-flex h-100 justify-content-start '>
+                                    <button onClick={this.toggleSidebar} className='btn btn-primary btn-block p-0'>Order List</button>
+                                </div>
+
+                        }
+                        {
+                            this.state.isOpen === true
+                                ?
+                                <div >
+
+                                    <Transition in={this.state.isOpen} timeout={duration}>
+                                        {(state) => (
+                                            <div className="sidebar" style={{
+                                                ...sidebarStyle,
+                                                ...sidebarTransitionStyles[state]
+                                            }}>
+                                                <div>
+                                                    {this.renderLinks()}
+                                                </div>
+                                                {
+                                                    this.state.arrOrder.length > 0
+                                                        ?
+                                                        <div>
+                                                            <button className='btn btn-block btn-primary mt-5 py-3 px-0' onClick={this.toggle}>Submit order</button>
+                                                            <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                                                                <ModalHeader toggle={this.toggle} className="px-auto ">Edit Product</ModalHeader>
+                                                                <ModalBody>
+                                                                    {this.renderConfirmation()}
+                                                                </ModalBody>
+                                                                <ModalFooter>
+                                                                    <Link to='/table'>
+                                                                        <Button color="primary" onClick={this.onSubmit}>Confirm</Button>
+                                                                    </Link>
+                                                                    <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                                                                </ModalFooter>
+                                                            </Modal>
+                                                        </div>
+                                                        :
+                                                        ''
+                                                }
+
+
+                                            </div>
+                                        )}
+                                    </Transition>
+                                </div>
+                                :
+                                ''
+                        }
+
+
+                    </div>
                     <div className='container'>
                         {
                             this.state.productDetail.length

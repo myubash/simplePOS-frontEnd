@@ -84,15 +84,11 @@ class SidebarContent extends Component {
         if (index === -1) return alert('No index')
         array.splice(index, 1)
         this.setState({ arrOrder: array })
-        this.handleDelArrC()
     }
     dor = (order) => {
         console.log(this.state.arrOrder)
     }
 
-    handleDelArrC = () => {
-        this.props.onDelArrC(this.state.arrOrder)
-    }
 
     UNSAFE_componentWillMount() {
         this.setState({ arrOrder: [...this.state.arrOrder, ...this.props.order] })
@@ -159,7 +155,7 @@ class SidebarContent extends Component {
                         {this.renderLinks()}
                     </div>
                     {
-                        this.props.order.length > 0
+                        this.state.arrOrder.length > 0
                             ?
                             <div>
                                 <button className='btn btn-block btn-primary mt-5 py-3 px-0' onClick={this.toggle}>Submit order</button>
