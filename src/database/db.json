@@ -1,36 +1,30 @@
 {
-  "users": [
-    {
+  "users": [{
       "id": 1,
       "userName": "admin",
       "userType": "admin",
-      "password": "admin",
-      "email": "admin"
+      "password": "admin"
     },
     {
       "id": 2,
       "userName": "waiter",
       "userType": "waiter",
-      "password": "waiter",
-      "email": "waiter"
+      "password": "waiter"
     },
     {
       "id": 3,
       "userName": "cashier",
       "userType": "cashier",
-      "password": "cashier",
-      "email": "cashier"
+      "password": "cashier"
     },
     {
       "id": 4,
       "userName": "kitchen",
       "userType": "kitchen",
-      "password": "kitchen",
-      "email": "kitchen"
+      "password": "kitchen"
     }
   ],
-  "employee": [
-    {
+  "employee": [{
       "id": 1,
       "name": "waiter",
       "email": "waiter@waiter.waiter",
@@ -58,8 +52,7 @@
       "userId": 4
     }
   ],
-  "menu": [
-    {
+  "menu": [{
       "id": 1,
       "productName": "Ayam goreng",
       "productType": "Lauk",
@@ -88,10 +81,8 @@
       "productDescription": "Nasi ditambah ayam bakar"
     }
   ],
-  "orders": [
-    {
-      "list": [
-        {
+  "orders": [{
+      "list": [{
           "productName": "Paket A",
           "productPrice": "20000",
           "productId": 4,
@@ -111,8 +102,7 @@
       "id": 1
     },
     {
-      "list": [
-        {
+      "list": [{
           "productName": "Ayam bakar",
           "productPrice": "12000",
           "productId": 2,
@@ -132,27 +122,23 @@
       "id": 2
     }
   ],
-  "newmenu": [
-    {
-      "productName": "nama",
-      "productType": "Lauk",
-      "productEstPrice": "123",
-      "productDescription": "desc",
-      "productIngredients": "ing",
-      "productPhoto": "blackCat.jpg",
-      "id": 1
-    }
-  ],
-  "reservation": [
-    {
-      "name": "name",
-      "address": "add",
-      "email": "mail",
-      "menuItem": "item: Paket A  X 10\nitem: Ayam bakar  X 10\n",
-      "nett": "10",
-      "companyName": "cname",
-      "companyAddress": "cname",
-      "id": 1
-    }
-  ]
+  "newmenu": [{
+    "productName": "nama",
+    "productType": "Lauk",
+    "productEstPrice": "123",
+    "productDescription": "desc",
+    "productIngredients": "ing",
+    "productPhoto": "blackCat.jpg",
+    "id": 1
+  }],
+  "reservation": [{
+    "name": "name",
+    "address": "add",
+    "email": "mail",
+    "menuItem": "item: Paket A  X 10\nitem: Ayam bakar  X 10\n",
+    "nett": "10",
+    "companyName": "cname",
+    "companyAddress": "cname",
+    "id": 1
+  }]
 }

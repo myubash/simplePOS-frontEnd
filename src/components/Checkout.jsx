@@ -5,11 +5,16 @@ import {
     Card, CardBody, Row, Col,
 } from 'reactstrap';
 import axios from 'axios';
+import { addTableNum } from '../actions/index'
+
 
 export class Checkout extends Component {
     state = {
         arrOrder: [],
         sum: 0
+    }
+    tableNum = (num) => {
+        this.props.addTableNum(num)
     }
 
     componentDidMount() {
@@ -73,47 +78,48 @@ export class Checkout extends Component {
             if (order.paid) {
                 return (
                     <Col xs='11' className='my-3 ' key={order.id}>
-                        {/* <Link to='#' className='text-decoration-none'> */}
-                        <Card className='bg-success text-light' onClick={() => this.change(order.id, order.paid)} >
-                            <h3 className='ml-3 mt-3 mb-0'>Customer {order.customerTable}</h3>
-                            <CardBody className='m-0'>
-                                {this.renderListOrder(order.customerTable)}
-                                <div className='d-flex border-top border-light my-2'>
-                                    <div>
-                                        <h3>Total price :</h3>
+                        <Link to='/checkoutconfirmation' className='text-decoration-none'>
+                            <Card className='bg-success text-light' onClick={() => this.tableNum(order.customerTable)}>
+                                <h3 className='ml-3 mt-3 mb-0'>Customer {order.customerTable}</h3>
+                                <CardBody className='m-0'>
+                                    {this.renderListOrder(order.customerTable)}
+                                    <div className='d-flex border-top border-light my-2'>
+                                        <div>
+                                            <h3>Total price :</h3>
+                                        </div>
+                                        <div className='ml-auto'>
+                                            <h3>
+                                                Rp. {this.totalSum(order.customerTable)}
+                                            </h3>
+                                        </div>
                                     </div>
-                                    <div className='ml-auto'>
-                                        <h3>
-                                            Rp. {this.totalSum(order.customerTable)}
-                                        </h3>
-                                    </div>
-                                </div>
-                            </CardBody>
-                        </Card>
-                        {/* </Link> */}
+                                </CardBody>
+                            </Card>
+                        </Link>
                     </Col>
                 )
             } else {
                 return (
                     <Col xs='11' className='my-3 ' key={order.id}>
-                        {/* <Link to='#' className='text-decoration-none'> */}
-                        <Card className='bg-danger text-light' onClick={() => this.change(order.id)}>
-                            <h3 className='ml-3 mt-3 mb-0'>Customer {order.customerTable}</h3>
-                            <CardBody className='m-0'>
-                                {this.renderListOrder(order.customerTable)}
-                                <div className='d-flex border-top border-light my-2'>
-                                    <div>
-                                        <h3>Total price :</h3>
+                        <Link to='/checkoutconfirmation' className='text-decoration-none'>
+
+                            <Card className='bg-danger text-light' onClick={() => this.tableNum(order.customerTable)}>
+                                <h3 className='ml-3 mt-3 mb-0'>Customer {order.customerTable}</h3>
+                                <CardBody className='m-0'>
+                                    {this.renderListOrder(order.customerTable)}
+                                    <div className='d-flex border-top border-light my-2'>
+                                        <div>
+                                            <h3>Total price :</h3>
+                                        </div>
+                                        <div className='ml-auto'>
+                                            <h3>
+                                                Rp. {this.totalSum(order.customerTable)}
+                                            </h3>
+                                        </div>
                                     </div>
-                                    <div className='ml-auto'>
-                                        <h3>
-                                            Rp. {this.totalSum(order.customerTable)}
-                                        </h3>
-                                    </div>
-                                </div>
-                            </CardBody>
-                        </Card>
-                        {/* </Link> */}
+                                </CardBody>
+                            </Card>
+                        </Link>
                     </Col>
                 )
             }
@@ -164,4 +170,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, null)(Checkout)
+export default connect(mapStateToProps, { addTableNum })(Checkout)

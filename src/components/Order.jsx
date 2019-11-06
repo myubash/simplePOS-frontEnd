@@ -3,25 +3,34 @@ import { Row, Col, Card, CardImg, CardTitle, Modal, ModalHeader, ModalBody, Moda
 import darwin from '../assets/darwin.png'
 import { Redirect, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+
 import axios from 'axios'
 import { delTableNum } from '../actions/index'
 import Swal from 'sweetalert2'
 import { Transition } from 'react-transition-group'
 
+// TRANSITION DURATION
 const duration = 500
 
+// TRANSITION
 const sidebarStyle = {
     transition: `width ${duration}ms`
 }
+
+// WIDTH SETTING
 const sidebarTransitionStyles = {
     entering: { width: 0 },
     entered: { width: '300px' },
     exiting: { width: '300px' },
     exited: { width: 0 }
 }
+
+// OPACITY TRANSITION DURATION (same as width duration)
 const linkStyle = {
     transition: `opacity ${duration}ms`
 }
+
+// LINK OPACITY SETTING
 const linkTransitionStyles = {
     entering: { opacity: 0 },
     entered: { opacity: 1 },
@@ -42,6 +51,7 @@ export class Order extends Component {
 
     }
 
+    // 
     renderLinks = () => {
         return <Transition in={this.state.isOpen} timeout={duration}>
             {(state) => (
@@ -332,16 +342,11 @@ export class Order extends Component {
     resetTable = () => {
         this.props.delTableNum()
     }
-    handleDelArr = (_arrOrder) => {
-        this.setState({
-            arrOrder: _arrOrder
-        })
-    }
 
     render() {
         if (this.props.userName && (this.props.userType === "cashier" || this.props.userType === "waiter") && this.props.tableNum) {
             return (
-                <div className='app' >
+                <div className='app'  >
                     <div className='sidebar-container'>
                         {
                             this.state.isOpen === true

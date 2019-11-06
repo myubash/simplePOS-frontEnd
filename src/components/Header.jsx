@@ -28,13 +28,13 @@ export class Header extends Component {
                                 {
                                     this.props.tableNum.includes('takeaway')
                                         ?
-                                        <NavLink className='nav-link' to='/order'>
+                                        <div className='nav-link'>
                                             {this.props.tableNum}
-                                        </NavLink>
+                                        </div>
                                         :
-                                        <NavLink className='nav-link' to='/order'>
+                                        <div className='nav-link'>
                                             Table no-{this.props.tableNum}
-                                        </NavLink>
+                                        </div>
                                 }
 
                             </NavItem>

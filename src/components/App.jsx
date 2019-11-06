@@ -15,6 +15,7 @@ import RegisterAdmin from './RegisterAdmin'
 import NewMenu from './NewMenu'
 import Reservation from './Reservation'
 import UpdateProfile from './UpdateProfile'
+import CheckoutConfirmation from './CheckoutConfirmation'
 import { connect } from 'react-redux'
 import { keepLogin, keepTableNum } from '../actions/index'
 import '../style/sidebar.css'
@@ -60,6 +61,7 @@ export class App extends Component {
                             <Route path='/newmenu' component={NewMenu} />
                             <Route path='/reservation' component={Reservation} />
                             <Route path='/updateprofile' component={UpdateProfile} />
+                            <Route path='/checkoutconfirmation' component={CheckoutConfirmation} />
 
                         </div>
                     </BrowserRouter>
