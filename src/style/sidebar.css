@@ -1,0 +1,92 @@
+.app {
+    display: flex
+}
+
+.sidebar-container {
+    min-height: 93vh;
+    background-color: grey;
+    position: sticky;
+}
+
+.sidebar {
+    width: 100%;
+}
+
+.sidebar-link {
+    padding: 10px
+}
+
+.sidebar-link:hover {
+    border-right: 5px solid dimgray;
+    background-color: gainsboro;
+}
+
+.sidebarIcon {
+    position: absolute;
+    right: 0;
+    top: 0
+}
+
+
+.sidebarIcon1 {
+    position: absolute;
+    left: 0;
+    top: 0
+}
+
+.overflowTest {
+    color: black;
+    padding: 10px;
+    padding-top: 2px;
+    height: 100px;
+    overflow: auto;
+    border: 1px solid #ccc;
+}
+
+.produk {
+    color: black;
+    height: 150px;
+    overflow: auto;
+}
+
+.menuItem {
+    height: 15vh;
+}
+
+.menu {
+    height: 65vh;
+    color: black;
+    padding-top: 2px;
+    overflow: auto;
+}
+
+.checkoutOption {
+    overflow: auto;
+    color: black;
+    height: 80vh;
+    padding: 2px;
+}
+
+.itemListKitchen {
+    min-height: 75vh;
+}
+
+.listKitchen {
+    overflow: auto;
+    color: black;
+    height: 80vh;
+    padding: 2px;
+}
+
+.itemKitchen {
+    overflow: auto;
+    color: black;
+    height: 60vh;
+    padding: 2px;
+}
+
+.takeaway {
+    overflow: auto;
+    height: 70vh;
+    padding: 2px;
+}

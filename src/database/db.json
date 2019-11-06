@@ -1,0 +1,137 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "userName": "admin",
+      "userType": "admin",
+      "password": "admin",
+      "email": "admin"
+    },
+    {
+      "id": 2,
+      "userName": "waiter",
+      "userType": "waiter",
+      "password": "waiter",
+      "email": "waiter"
+    },
+    {
+      "id": 3,
+      "userName": "cashier",
+      "userType": "cashier",
+      "password": "cashier",
+      "email": "cashier"
+    },
+    {
+      "id": 4,
+      "userName": "kitchen",
+      "userType": "kitchen",
+      "password": "kitchen",
+      "email": "kitchen"
+    }
+  ],
+  "employee": [
+    {
+      "id": 1,
+      "name": "waiter",
+      "email": "waiter@waiter.waiter",
+      "birthPlace": "waiter",
+      "birthDate": "1-1-1111",
+      "address": "waiter",
+      "userId": 2
+    },
+    {
+      "id": 2,
+      "name": "cashier",
+      "email": "cashier@cashier.cashier",
+      "birthPlace": "cashier",
+      "birthDate": "1-1-1111",
+      "address": "cashier",
+      "userId": 3
+    },
+    {
+      "id": 3,
+      "name": "kitchen",
+      "email": "kitchen@kitchen.kitchen",
+      "birthPlace": "kitchen",
+      "birthDate": "1-1-1111",
+      "address": "kitchen",
+      "userId": 4
+    }
+  ],
+  "menu": [
+    {
+      "id": 1,
+      "productName": "Ayam goreng",
+      "productType": "Lauk",
+      "productPrice": "10000",
+      "productDescription": "Ayam yang digoreng"
+    },
+    {
+      "id": 2,
+      "productName": "Ayam bakar",
+      "productType": "Lauk",
+      "productPrice": "12000",
+      "productDescription": "Ayam yang dibakar"
+    },
+    {
+      "id": 3,
+      "productName": "Nasi",
+      "productType": "Tambahan",
+      "productPrice": "5000",
+      "productDescription": "Nasi mateng"
+    },
+    {
+      "id": 4,
+      "productName": "Paket A",
+      "productType": "Paket",
+      "productPrice": "20000",
+      "productDescription": "Nasi ditambah ayam bakar"
+    }
+  ],
+  "orders": [
+    {
+      "list": [
+        {
+          "productName": "Paket A",
+          "productPrice": "20000",
+          "productId": 4,
+          "productType": "Paket",
+          "qty": 1
+        },
+        {
+          "productName": "Paket A",
+          "productPrice": "20000",
+          "productId": 4,
+          "productType": "Paket",
+          "qty": 1
+        }
+      ],
+      "customerTable": "takeaway-1",
+      "paid": false,
+      "id": 1
+    }
+  ],
+  "newmenu": [
+    {
+      "productName": "nama",
+      "productType": "Lauk",
+      "productEstPrice": "123",
+      "productDescription": "desc",
+      "productIngredients": "ing",
+      "productPhoto": "blackCat.jpg",
+      "id": 1
+    }
+  ],
+  "reservation": [
+    {
+      "name": "name",
+      "address": "add",
+      "email": "mail",
+      "menuItem": "item: Paket A  X 10\nitem: Ayam bakar  X 10\n",
+      "nett": "10",
+      "companyName": "cname",
+      "companyAddress": "cname",
+      "id": 1
+    }
+  ]
+}
