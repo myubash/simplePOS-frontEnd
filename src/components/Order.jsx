@@ -117,6 +117,7 @@ export class Order extends Component {
         let index = array.map(function (e) { return e.productId; }).indexOf(id);
         if (index === -1) return alert('No index')
         array.splice(index, 1)
+        // console.log(array)
         this.setState({ arrOrder: array })
     }
 
@@ -291,6 +292,29 @@ export class Order extends Component {
             return alert('Please insert quantity')
         }
 
+
+        let dor = this.state.arrOrder.filter(val => {
+            return val.productId === id
+        })
+        if (dor.length > 0) {
+            let sum = parseInt(dor[0].qty) + parseInt(this.state.qty)
+            let array = [...this.state.arrOrder]
+            let index = array.map(function (e) { return e.productId; }).indexOf(id);
+            if (index === -1) return alert('No index')
+            array.splice(index, 1)
+            return this.setState({
+                arrOrder: [...array, {
+                    productName: name,
+                    productPrice: price,
+                    productId: id,
+                    productType: type,
+                    qty: sum
+                }],
+                qty: 0
+            })
+        }
+
+
         return this.setState({
             arrOrder: [...this.state.arrOrder, {
                 productName: name,
@@ -308,9 +332,9 @@ export class Order extends Component {
     jedor = () => {
         console.log(this.state.arrOrder)
         let dor = this.state.arrOrder.filter(val => {
-            return val.productId == 2
+            return val.productId === 2
         })
-        console.log(dor)
+        console.log(...this.state.arrOrder)
 
     }
 
@@ -413,7 +437,7 @@ export class Order extends Component {
                                                     this.state.arrOrder.length > 0
                                                         ?
                                                         <div>
-                                                            <button className='btn btn-block btn-primary mt-5 py-3 px-0' onClick={this.jedor}>Submit order</button>
+                                                            <button className='btn btn-block btn-primary mt-5 py-3 px-0' onClick={this.toggle}>Submit order</button>
                                                             <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
                                                                 <ModalHeader toggle={this.toggle} className="px-auto ">Edit Product</ModalHeader>
                                                                 <ModalBody>
