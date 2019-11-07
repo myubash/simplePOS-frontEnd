@@ -84,7 +84,23 @@
       "productDescription": "Nasi ditambah ayam bakar"
     }
   ],
-  "orders": [],
+  "orders": [
+    {
+      "list": [
+        {
+          "productName": "Ayam bakar",
+          "productPrice": "12000",
+          "productId": 2,
+          "productType": "Lauk",
+          "qty": 1
+        }
+      ],
+      "customerTable": "takeaway-1",
+      "paid": false,
+      "cooked": false,
+      "id": 1
+    }
+  ],
   "newmenu": [
     {
       "productName": "nama",

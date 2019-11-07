@@ -10,46 +10,48 @@ export class Reservation extends Component {
         type: '',
         price: 0,
         id: 0,
-        lauk: [],
-        tambahan: [],
-        paket: [],
+        arrMenu: [],
         itemList: []
     }
 
     componentDidMount = async () => {
         try {
-            let lauk = await axios.get(
-                'http://localhost:2000/Lauk'
+            let res = await axios.get(
+                'http://localhost:2000/menu'
             )
-            let tambahan = await axios.get(
-                'http://localhost:2000/Tambahan'
-            )
-            let paket = await axios.get(
-                'http://localhost:2000/Paket'
-            )
-            this.setState({
-                lauk: lauk.data,
-                tambahan: tambahan.data,
-                paket: paket.data
-            })
+            this.setState({ arrMenu: res.data })
+            console.log(res.data)
         } catch (error) {
             console.log(error)
         }
     }
 
     renderLauk = () => {
-        return this.state.lauk.map(val => {
-            return <DropdownItem key={val.id} onFocus={() => this.setState({ menu: val.productName, type: 'lauk', price: val.productPrice, id: val.id })}>{val.productName}</DropdownItem>
+        return this.state.arrMenu.map(product => {
+            if (product.productType === 'Lauk') {
+                return (
+                    <DropdownItem key={product.id} onFocus={() => this.setState({ menu: product.productName, type: 'lauk', price: product.productPrice, id: product.id })}>{product.productName}</DropdownItem>
+                )
+            }
         })
+
     }
     renderTambahan = () => {
-        return this.state.tambahan.map(val => {
-            return <DropdownItem key={val.id} onFocus={() => this.setState({ menu: val.productName, type: 'tambahan', price: val.productPrice, id: val.id })}>{val.productName}</DropdownItem>
+        return this.state.arrMenu.map(product => {
+            if (product.productType === 'Tambahan') {
+                return (
+                    <DropdownItem key={product.id} onFocus={() => this.setState({ menu: product.productName, type: 'lauk', price: product.productPrice, id: product.id })}>{product.productName}</DropdownItem>
+                )
+            }
         })
     }
     renderPaket = () => {
-        return this.state.paket.map(val => {
-            return <DropdownItem key={val.id} onFocus={() => this.setState({ menu: val.productName, type: 'paket', price: val.productPrice, id: val.id })}>{val.productName}</DropdownItem>
+        return this.state.arrMenu.map(product => {
+            if (product.productType === 'Paket') {
+                return (
+                    <DropdownItem key={product.id} onFocus={() => this.setState({ menu: product.productName, type: 'lauk', price: product.productPrice, id: product.id })}>{product.productName}</DropdownItem>
+                )
+            }
         })
     }
 

@@ -129,7 +129,8 @@ export class Order extends Component {
             {
                 list: this.state.arrOrder,
                 customerTable: this.props.tableNum,
-                paid: false
+                paid: false,
+                cooked: false
             }
         )
             .then(res => {
