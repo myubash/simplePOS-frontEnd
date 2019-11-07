@@ -80,7 +80,14 @@ export class Checkout extends Component {
                     <Col xs='11' className='my-3 ' key={order.id}>
                         <Link to='/checkoutconfirmation' className='text-decoration-none'>
                             <Card className='bg-success text-light' onClick={() => this.tableNum(order.customerTable)}>
-                                <h3 className='ml-3 mt-3 mb-0'>Customer {order.customerTable}</h3>
+                                <Row>
+                                    <Col xs='4' className='ml-3 mt-3 mb-0'>
+                                        <h3 >Customer {order.customerTable}</h3>
+                                    </Col>
+                                    <Col xs='7' className=' ml-auto mr-3 mt-1 mb-0 d-flex justify-content-end'>
+                                        <h6>(OrderId - {order.id})</h6>
+                                    </Col>
+                                </Row>
                                 <CardBody className='m-0'>
                                     {this.renderListOrder(order.customerTable)}
                                     <div className='d-flex border-top border-light my-2'>
@@ -104,7 +111,14 @@ export class Checkout extends Component {
                         <Link to='/checkoutconfirmation' className='text-decoration-none'>
 
                             <Card className='bg-danger text-light' onClick={() => this.tableNum(order.customerTable)}>
-                                <h3 className='ml-3 mt-3 mb-0'>Customer {order.customerTable}</h3>
+                                <Row>
+                                    <Col xs='4' className='ml-3 mt-3 mb-0'>
+                                        <h3 >Customer {order.customerTable}</h3>
+                                    </Col>
+                                    <Col xs='7' className=' ml-auto mr-3 mt-1 mb-0 d-flex justify-content-end'>
+                                        <h6>(OrderId - {order.id})</h6>
+                                    </Col>
+                                </Row>
                                 <CardBody className='m-0'>
                                     {this.renderListOrder(order.customerTable)}
                                     <div className='d-flex border-top border-light my-2'>

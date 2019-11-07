@@ -51,7 +51,7 @@ export class Order extends Component {
 
     }
 
-    // 
+    // SIDEBAR FRAME
     renderLinks = () => {
         return <Transition in={this.state.isOpen} timeout={duration}>
             {(state) => (
@@ -67,6 +67,7 @@ export class Order extends Component {
         </Transition>
     }
 
+    // RENDER ORDERS
     renderOrders = () => {
         // let { id, customerId, orderDetail, status } = this.state.arrOrder
         return this.state.arrOrder.map(order => {
@@ -89,6 +90,8 @@ export class Order extends Component {
             )
         })
     }
+
+    // RENDER CONFIRMATION
     renderConfirmation = () => {
         return this.state.arrOrder.map(order => {
             return (
@@ -107,6 +110,8 @@ export class Order extends Component {
             )
         })
     }
+
+    // DELETE ORDER CONTENT
     delete = (id) => {
         let array = [...this.state.arrOrder]
         let index = array.map(function (e) { return e.productId; }).indexOf(id);
@@ -115,6 +120,7 @@ export class Order extends Component {
         this.setState({ arrOrder: array })
     }
 
+    // SUBMIT ORDER
     onSubmit = () => {
         this.toggle()
         axios.post(
@@ -139,12 +145,14 @@ export class Order extends Component {
             })
     }
 
+    // TOGGLE DETAIL
     toggle = () => {
         this.setState(prevState => ({
             modal: !prevState.modal
         }))
     }
 
+    // TOGGLE SIDEBAR
     toggleSidebar = () => {
         this.setState(prevState => ({
             isOpen: !prevState.isOpen
@@ -154,6 +162,7 @@ export class Order extends Component {
     // this.state.arrorder[?].qty
     // this.state.arrorder[?].productid
 
+    // GET MENU INFO
     componentDidMount() {
         axios.get(
             'http://localhost:2000/menu'
@@ -166,7 +175,7 @@ export class Order extends Component {
             })
     }
 
-
+    // RENDER CATEGORY LAUK
     renderLauk = () => {
         let result = this.state.arrMenu.map(product => {
             if (product.productType === 'Lauk') {
@@ -184,6 +193,8 @@ export class Order extends Component {
         })
         return result
     }
+
+    // RENDER CATEGORY PAKET
     renderPaket = () => {
         let result = this.state.arrMenu.map(product => {
             if (product.productType === 'Paket') {
@@ -201,6 +212,8 @@ export class Order extends Component {
         })
         return result
     }
+
+    // RENDER CATEGORY TAMBAHAN
     renderTambahan = () => {
         let result = this.state.arrMenu.map(product => {
             if (product.productType === 'Tambahan') {
@@ -218,26 +231,36 @@ export class Order extends Component {
         })
         return result
     }
+
+    // ADD DETAIL INFO
     addDetail = (name, description, price, id, type) => {
         this.setState({
             productDetail: [{ name, description, price, id, type }]
         })
     }
+
+    // DELETE DETAIL INFO
     delDetail = () => {
         this.setState({
             productDetail: []
         })
     }
+
+    // DECREASE INPUT QTY
     decQty = () => {
         if (this.state.qty > 0) {
             this.setState({ qty: this.state.qty - 1 })
         }
     }
+
+    // INCREASE INPUT QTY
     incQty = () => {
         if (this.state.qty >= 0) {
             this.setState({ qty: this.state.qty + 1 })
         }
     }
+
+    // DECREASE INPUT QTY BY 5
     decQty5 = () => {
         if (this.state.qty >= 5) {
             this.setState({ qty: this.state.qty - 5 })
@@ -246,16 +269,22 @@ export class Order extends Component {
             this.setState({ qty: 0 })
         }
     }
+
+    // INCREASE INPUT QTY BY 5
     incQty5 = () => {
         if (this.state.qty >= 0) {
             this.setState({ qty: this.state.qty + 5 })
         }
     }
+
+    // RESET INPUT QTY
     resetQty = () => {
         if (this.state.qty >= 0) {
             this.setState({ qty: 0 })
         }
     }
+
+    // INPUT ORDER TO SIDEBAR
     addOrder = async (name, price, id, type) => {
         let qty = this.state.qty
         if (qty === 0) {
@@ -269,16 +298,23 @@ export class Order extends Component {
                 productId: id,
                 productType: type,
                 qty
-            }]
+            }],
+            qty: 0
         })
 
     }
 
+    // DUMMY FN
     jedor = () => {
         console.log(this.state.arrOrder)
+        let dor = this.state.arrOrder.filter(val => {
+            return val.productId == 2
+        })
+        console.log(dor)
 
     }
 
+    // QTY INPUT FN
     inputQty = (e) => {
         let qty = parseInt(e.target.value)
         if (isNaN(qty)) {
@@ -287,6 +323,7 @@ export class Order extends Component {
         this.setState({ qty: qty })
     }
 
+    // RENDER DETAILED MENU ITEM
     showDetail = () => {
         let result = this.state.productDetail.map(product => {
             return (
@@ -335,14 +372,12 @@ export class Order extends Component {
         return result
     }
 
+    // RESET DETAILED MENU ITEM
     resetDetail = () => {
         this.setState({ productDetail: [] })
     }
 
-    resetTable = () => {
-        this.props.delTableNum()
-    }
-
+    // RENDER COMPONENT
     render() {
         if (this.props.userName && (this.props.userType === "cashier" || this.props.userType === "waiter") && this.props.tableNum) {
             return (
@@ -378,7 +413,7 @@ export class Order extends Component {
                                                     this.state.arrOrder.length > 0
                                                         ?
                                                         <div>
-                                                            <button className='btn btn-block btn-primary mt-5 py-3 px-0' onClick={this.toggle}>Submit order</button>
+                                                            <button className='btn btn-block btn-primary mt-5 py-3 px-0' onClick={this.jedor}>Submit order</button>
                                                             <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
                                                                 <ModalHeader toggle={this.toggle} className="px-auto ">Edit Product</ModalHeader>
                                                                 <ModalBody>
@@ -395,8 +430,6 @@ export class Order extends Component {
                                                         :
                                                         ''
                                                 }
-
-
                                             </div>
                                         )}
                                     </Transition>
@@ -404,8 +437,6 @@ export class Order extends Component {
                                 :
                                 ''
                         }
-
-
                     </div>
                     <div className='container'>
                         {

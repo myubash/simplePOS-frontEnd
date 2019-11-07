@@ -4,6 +4,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logoutData, delTableNum } from '../actions/index'
 
+
 export class Header extends Component {
     state = {
         nav: false
@@ -15,6 +16,10 @@ export class Header extends Component {
         alert('LOGOUT BERHASIL')
         // console.log(this.props.tableNum)
         // console.log(this.props.tableNum.includes('takeaway'))
+    }
+
+    delTable = () => {
+        this.props.delTableNum()
     }
 
     renderNav = () => {
@@ -158,11 +163,11 @@ export class Header extends Component {
                         {
                             this.props.userType === 'cashier'
                                 ?
-                                <Link to='/cashier' className='navbar-brand' >DOR</Link>
+                                <Link to='/cashier' className='navbar-brand' onClick={this.delTable} >DOR</Link>
                                 :
                                 this.props.userType === 'waiter'
                                     ?
-                                    <Link to='/waiter' className='navbar-brand' >DOR</Link>
+                                    <Link to='/waiter' className='navbar-brand' onClick={this.delTable}>DOR</Link>
                                     :
                                     this.props.userType === 'kitchen'
                                         ?

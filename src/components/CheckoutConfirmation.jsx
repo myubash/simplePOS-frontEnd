@@ -65,7 +65,15 @@ export class CheckoutConfirmation extends Component {
                 <Col xs='11' className='my-3 ' key={val.id}>
                     <Link to='/checkoutconfirmation' className='text-decoration-none'>
                         <Card className='text-dark' onClick={() => this.tableNum(val.customerTable)}>
-                            <h3 className='ml-3 mt-3 mb-0'>Customer {val.customerTable}</h3>
+                            <Row>
+                                <Col xs='3' className='ml-3 mt-3 mb-0'>
+                                    <h3 >Customer {val.customerTable}</h3>
+                                </Col>
+                                <Col xs='8' className=' ml-auto mr-3 mt-1 mb-0 d-flex justify-content-end'>
+                                    <h6>(OrderId - {val.id})</h6>
+                                </Col>
+                            </Row>
+
                             <CardBody className='m-0'>
                                 {this.renderListOrder(val.customerTable)}
                                 <div className='d-flex border-top border-danger my-2'>
