@@ -22,7 +22,10 @@ export class Checkout extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:2000/orders')
+        axios.get(
+            'http://localhost:2000/orders',
+            { params: { cooked: true } }
+        )
             .then(res => {
                 this.setState({ arrOrder: res.data })
             })
@@ -46,6 +49,9 @@ export class Checkout extends Component {
             }
         })
     }
+
+
+
     dor = () => {
         console.log(this.state.orderId)
     }
@@ -61,24 +67,15 @@ export class Checkout extends Component {
         })
         return sum
     }
-    change = async (id, _paid) => {
-        try {
-            let res = await axios.patch(
-                'http://localhost:2000/orders/' + id,
-                {
-                    paid: !_paid
-                }
-            )
-            alert('Update success')
-            this.componentDidMount()
-        } catch (error) {
-            console.log(error)
-        }
-
-    }
 
     onSubmit = async () => {
+        let array = [...this.state.arrOrder]
+        let index = array.map(function (e) { return e.id; }).indexOf(this.state.orderId);
         try {
+            let resp = await axios.post(
+                'http://localhost:2000/orderhistory',
+                { history: this.state.arrOrder[index] }
+            )
             let res = await axios.delete(
                 'http://localhost:2000/orders/' + this.state.orderId
             )

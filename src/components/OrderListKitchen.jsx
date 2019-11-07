@@ -1,26 +1,108 @@
 import React, { Component } from 'react'
 import { Redirect, } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Row, Col, Card, CardBody } from 'reactstrap'
+import { Row, Col, Card, CardBody, CardFooter } from 'reactstrap'
+import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export class OrderListKitchen extends Component {
+
+    state = {
+        arrOrder: []
+    }
+
+    async componentDidMount() {
+        try {
+            let res = await axios.get(
+                'http://localhost:2000/orders',
+                { params: { cooked: false } }
+            )
+            console.log(res)
+            this.setState({ arrOrder: res.data })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    onDelete = async (id) => {
+        try {
+            let res = await axios.delete(
+                'http://localhost:2000/orders/' + id
+            )
+            Swal.fire({
+                type: 'success',
+                title: 'Delete id-' + id + ' success'
+            })
+            this.componentDidMount()
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+    onDone = async (id) => {
+        try {
+            let res = await axios.patch(
+                'http://localhost:2000/orders/' + id,
+                { cooked: true }
+            )
+            Swal.fire({
+                type: 'success',
+                title: 'Update id-' + id + ' success'
+            })
+            this.componentDidMount()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    renderOrder = () => {
+        return this.state.arrOrder.map(val => {
+            return (
+                <Col xs='4' className=' my-2'>
+                    <Card >
+                        <div className='ml-2 mt-2'>
+                            <h4 >Customer {val.customerTable}</h4>
+                            <h6>(OrderId - {val.id})</h6>
+                        </div>
+                        <CardBody className='itemKitchen px-3 py-1'>
+                            {this.renderListOrder(val.customerTable)}
+                        </CardBody>
+                        <CardFooter className='d-flex'>
+                            <button className='btn btn-danger' onClick={() => this.onDelete(val.id)}>Decline order</button>
+                            <button className='btn btn-success ml-auto px-5' onClick={() => this.onDone(val.id)}> DONE</button>
+                        </CardFooter>
+                    </Card>
+                </Col>
+            )
+        })
+    }
+
+    renderListOrder = (customer) => {
+        return this.state.arrOrder.map(order => {
+            if (order.customerTable === customer) {
+                return order.list.map(item => {
+                    // sum = sum + (parseInt(item.productPrice) * parseInt(item.qty))
+                    return (<div className='d-flex py-2'>
+                        <div>
+                            <span className='mr-2'>{item.productName}</span>
+                        </div>
+                        <div className='ml-auto'>
+                            <span className='ml-2'>{item.qty} pcs</span>
+                        </div>
+                    </div>
+                    )
+                })
+            }
+        })
+    }
+
     render() {
         if (this.props.userName && this.props.userType === "kitchen") {
             return (
                 <div className='container'>
-                    <Row className='align-content-between mt-4 listKitchen'>
-                        <Col xs='4' className=' my-2'>
-                            <Card className='itemListKitchen'>
-                                <h4 className='m-3'>Order-no</h4>
-                                <CardBody className='itemKitchen px-3 py-1'>
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis explicabo voluptatem sed amet, deleniti aliquam neque tenetur maxime aliquid quas nesciunt itaque earum, non libero nihil debitis hic vitae tempore?
-                                    Nisi nam modi et autem, aspernatur neque assumenda similique qui quae nemo saepe dolores, soluta ad suscipit possimus quod, libero non. Non voluptate impedit eius eos omnis adipisci nisi magnam?
-                                    Possimus corporis modi ab beatae voluptatem unde voluptates fuga sed vero. Amet iste, voluptates fugit fuga, dolorum magnam doloremque, reprehenderit neque nam tenetur aspernatur. Fugit itaque excepturi ab optio laudantium.
-                                    Ducimus soluta, repellendus alias quam porro quis deleniti enim atque, officiis blanditiis voluptatibus praesentium dignissimos nemo animi aspernatur accusamus minima vel provident optio! Magni, dolore aut? Quod eaque fugit perferendis.
-                                    Maiores atque maxime, cum laudantium voluptate voluptates veniam culpa officiis recusandae nostrum sapiente soluta asperiores vitae cumque inventore distinctio laborum velit delectus dignissimos, fuga quasi eos veritatis quaerat. Esse, exercitationem!</p>
-                                </CardBody>
-                            </Card>
-                        </Col>
+                    <Row className='align-content-between mt-4 '>
+                        {this.state.arrOrder.length === 0 ? <h1>EMPTY</h1> : this.renderOrder()}
                     </Row>
                 </div>
             )
