@@ -330,11 +330,11 @@ export class Order extends Component {
 
     // DUMMY FN
     jedor = () => {
-        console.log(this.state.arrOrder)
-        let dor = this.state.arrOrder.filter(val => {
-            return val.productId === 2
-        })
-        console.log(...this.state.arrOrder)
+        // console.log(this.state.arrOrder)
+        // let dor = this.state.arrOrder.filter(val => {
+        //     return val.productId === 2
+        // })
+        // console.log(...this.state.arrOrder)
 
     }
 
@@ -401,6 +401,12 @@ export class Order extends Component {
         this.setState({ productDetail: [] })
     }
 
+    resetTable = () => {
+        this.props.delTableNum()
+    }
+
+
+
     // RENDER COMPONENT
     render() {
         if (this.props.userName && (this.props.userType === "cashier" || this.props.userType === "waiter") && this.props.tableNum) {
@@ -437,7 +443,7 @@ export class Order extends Component {
                                                     this.state.arrOrder.length > 0
                                                         ?
                                                         <div>
-                                                            <button className='btn btn-block btn-primary mt-5 py-3 px-0' onClick={this.toggle}>Submit order</button>
+                                                            <button className='btn btn-block btn-success mt-5 py-3 px-0' onClick={this.toggle}>Submit order</button>
                                                             <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
                                                                 <ModalHeader toggle={this.toggle} className="px-auto ">Edit Product</ModalHeader>
                                                                 <ModalBody>
@@ -447,7 +453,7 @@ export class Order extends Component {
                                                                     <Link to='/table'>
                                                                         <Button color="primary" onClick={this.onSubmit}>Confirm</Button>
                                                                     </Link>
-                                                                    <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                                                                    <Button color="danger" onClick={this.toggle}>Cancel</Button>
                                                                 </ModalFooter>
                                                             </Modal>
                                                         </div>
