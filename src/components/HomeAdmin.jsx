@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import {
     Card, CardBody, Row, Col,
 } from 'reactstrap';
-import {FaPencilAlt, FaBoxOpen} from 'react-icons/fa'
+import { FaPencilAlt, FaBoxOpen } from 'react-icons/fa'
 
 
 export class HomeAdmin extends Component {
@@ -17,7 +17,7 @@ export class HomeAdmin extends Component {
                             <Card>
                                 <Link to='/register'>
                                     <CardBody className="text-center">
-                                        <FaPencilAlt style={{ height: '100px', width: '100px' }}  />
+                                        <FaPencilAlt style={{ height: '100px', width: '100px' }} />
                                         <h1 className="my-3 text-dark">REGISTER USER</h1>
                                     </CardBody>
                                 </Link>
@@ -25,10 +25,10 @@ export class HomeAdmin extends Component {
                         </Col>
                         <Col xs='5' className='mt-5 pt-5'>
                             <Card>
-                                <Link to='/'>
+                                <Link to='/transactionhistory'>
                                     <CardBody className="text-center">
                                         <FaBoxOpen style={{ height: '100px', width: '100px' }} />
-                                        <h1 className="my-3 text-dark">INVENTORY DETAILS</h1>
+                                        <h1 className="my-3 text-dark">TRANSACTION HISTORY</h1>
                                     </CardBody>
                                 </Link>
                             </Card>

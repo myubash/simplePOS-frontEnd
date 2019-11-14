@@ -71,17 +71,21 @@ export class Checkout extends Component {
     onSubmit = async () => {
         let array = [...this.state.arrOrder]
         let index = array.map(function (e) { return e.id; }).indexOf(this.state.orderId);
+        let dor = this.state.arrOrder[index]
+        delete dor.cooked
+        console.log(dor)
         try {
             let resp = await axios.post(
                 'http://localhost:2000/orderhistory',
-                { history: this.state.arrOrder[index] }
+                { history: dor }
             )
             let res = await axios.delete(
                 'http://localhost:2000/orders/' + this.state.orderId
             )
             Swal.fire({
                 type: 'success',
-                title: 'Checkout success'
+                title: 'Checkout success',
+                timer: 700
             })
             // console.log(res)
             this.setState({ orderId: 0, toggleModal: !this.state.toggleModal })

@@ -236,7 +236,8 @@ export class Order extends Component {
     // ADD DETAIL INFO
     addDetail = (name, description, price, id, type) => {
         this.setState({
-            productDetail: [{ name, description, price, id, type }]
+            productDetail: [{ name, description, price, id, type }],
+            qty: 0
         })
     }
 
@@ -445,7 +446,7 @@ export class Order extends Component {
                                                         <div>
                                                             <button className='btn btn-block btn-success mt-5 py-3 px-0' onClick={this.toggle}>Submit order</button>
                                                             <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                                                                <ModalHeader toggle={this.toggle} className="px-auto ">Edit Product</ModalHeader>
+                                                                <ModalHeader toggle={this.toggle} className="px-auto ">Confirmation</ModalHeader>
                                                                 <ModalBody>
                                                                     {this.renderConfirmation()}
                                                                 </ModalBody>

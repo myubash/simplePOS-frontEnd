@@ -118,7 +118,16 @@
             "productId": 4,
             "productType": "Paket",
             "qty": 10
-          },
+          }
+        ],
+        "customerTable": "4",
+        "id": 1
+      },
+      "id": 1
+    },
+    {
+      "history": {
+        "list": [
           {
             "productName": "Ayam goreng",
             "productPrice": "10000",
@@ -128,10 +137,39 @@
           }
         ],
         "customerTable": "1",
-        "cooked": true,
         "id": 1
       },
-      "id": 1
+      "id": 2
+    },
+    {
+      "history": {
+        "list": [
+          {
+            "productName": "Ayam bakar",
+            "productPrice": "12000",
+            "productId": 2,
+            "productType": "Lauk",
+            "qty": 2
+          },
+          {
+            "productName": "Nasi",
+            "productPrice": "5000",
+            "productId": 3,
+            "productType": "Tambahan",
+            "qty": 2
+          },
+          {
+            "productName": "Paket A",
+            "productPrice": "20000",
+            "productId": 4,
+            "productType": "Paket",
+            "qty": 1
+          }
+        ],
+        "customerTable": "6",
+        "id": 1
+      },
+      "id": 3
     }
   ]
 }

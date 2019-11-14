@@ -48,7 +48,8 @@ export class OrderListKitchen extends Component {
             )
             Swal.fire({
                 type: 'success',
-                title: 'Update id-' + id + ' success'
+                title: 'Order id-' + id + ' done',
+                timer: 700
             })
             this.componentDidMount()
         } catch (error) {
