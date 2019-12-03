@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { UncontrolledButtonDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 import axios from 'axios';
+import url from '../support/url'
 
 export class Reservation extends Component {
     state = {
@@ -17,37 +18,49 @@ export class Reservation extends Component {
     componentDidMount = async () => {
         try {
             let res = await axios.get(
-                'http://localhost:2000/menu'
+                url + '/menu'
             )
-            this.setState({ arrMenu: res.data })
-            console.log(res.data)
+            if(res.data.error) return alert(res.data.error)
+            this.setState({ arrMenu: res.data.menu })
+            console.log(res.data.menu)
         } catch (error) {
             console.log(error)
         }
     }
 
-    renderLauk = () => {
+    renderMenuSet = () => {
         return this.state.arrMenu.map(product => {
-            if (product.productType === 'Lauk') {
+            if (product.productType === 'MenuSet') {
                 return (
                     <DropdownItem key={product.id} onFocus={() => this.setState({ menu: product.productName, type: 'lauk', price: product.productPrice, id: product.id })}>{product.productName}</DropdownItem>
                 )
             }
         })
+    }
 
-    }
-    renderTambahan = () => {
+    renderMainCourse = () => {
         return this.state.arrMenu.map(product => {
-            if (product.productType === 'Tambahan') {
+            if (product.productType === 'Main Course') {
                 return (
                     <DropdownItem key={product.id} onFocus={() => this.setState({ menu: product.productName, type: 'lauk', price: product.productPrice, id: product.id })}>{product.productName}</DropdownItem>
                 )
             }
         })
     }
-    renderPaket = () => {
+
+    renderSideDish = () => {
         return this.state.arrMenu.map(product => {
-            if (product.productType === 'Paket') {
+            if (product.productType === 'Side Dish') {
+                return (
+                    <DropdownItem key={product.id} onFocus={() => this.setState({ menu: product.productName, type: 'lauk', price: product.productPrice, id: product.id })}>{product.productName}</DropdownItem>
+                )
+            }
+        })
+    }
+
+    renderBeverage = () => {
+        return this.state.arrMenu.map(product => {
+            if (product.productType === 'Beverage') {
                 return (
                     <DropdownItem key={product.id} onFocus={() => this.setState({ menu: product.productName, type: 'lauk', price: product.productPrice, id: product.id })}>{product.productName}</DropdownItem>
                 )
@@ -58,67 +71,108 @@ export class Reservation extends Component {
     addItem = async (e) => {
         e.preventDefault()
         let qty = this.qty.value
+        let item = this.state.menu
+        let name = this.name.value
 
+        let data = this.state.arrMenu.filter(val => {
+            return val.productName === item
+        })
         if (!qty) {
             return alert('Please insert the correct quantity')
         }
-        let item = this.state.menu
-        // try {
-        //     let res = await axios.get(
-        //         `http://localhost:2000/order?productId=${this.state.id}&customerTable=${this.props.tableNum}`
-        //     )
-        //     if (!res.data) {
-        //         let resp = await axios.post(
-        //             'http://localhost:2000/orders',
-        //             {
-        //                 productName: item,
-        //                 productType: this.state.type,
-        //                 productPrice: this.state.price,
-        //                 productId: this.state.id,
-        //                 qty: qty,
-        //                 customerTable: this.props.tableNum
-        //             }
-        //         )
-        //         alert('Item added')
-        //         return console.log(resp)
-        //     }
-
-        //     let resp = await axios.patch(
-        //         'http://localhost:2000/orders',
-        //         {
-        //             qty: qty,
-        //             customerTable: this.props.tableNum
-        //         }
-        //     )
-        //     alert('Item added')
-        //     console.log(resp)
-        // } catch (error) {
-        //     console.log(error)
-        // }
-
-
-        this.setState({
-            itemList: [...this.state.itemList, { item, qty }]
+        if (!name) {
+            return alert('Please input name first')
+        }
+        if (!item) {
+            return alert('Please select menu item')
+        }
+        let price = this.state.price
+        let filtered = this.state.itemList.filter(val => {
+            return val.item === this.state.menu
         })
+        if (filtered.length > 0) {
+            let sum = parseInt(filtered[0].qty) + parseInt(qty)
+            let array = [...this.state.itemList]
+            
+            let index = array.map(function (e) { return e.item; }).indexOf(this.state.menu);
+            if (index === -1) return alert('No index')
+            array.splice(index, 1)
+
+            this.qty.value = ''
+
+            return this.setState({
+                itemList: [...array, {
+                    id: data[0].id,
+                    item: item,
+                    price: price,
+                    name: name,
+                    qty: parseInt(sum)
+                }],
+                menu: ''
+            })
+        }
+        this.qty.value = ''
+        this.setState({
+            itemList: [...this.state.itemList, {
+                id: data[0].id,
+                item: item,
+                price: price,
+                name: name,
+                qty: parseInt(qty)
+            }],
+            menu: ''
+        })
+    }
+
+    dor = () => {
+        console.log(this.state.itemList)
+    }
+
+    delete = (item) => {
+        let array = [...this.state.itemList]
+        let index = array.map(function (e) { return e.item; }).indexOf(item);
+        if (index === -1) return alert('No index')
+        array.splice(index, 1)
+        // console.log(array)
+        this.setState({ itemList: array })
     }
 
     renderItemList = () => {
         let result = this.state.itemList.map(val => {
             return (
-                `item: ${val.item}  X ${val.qty}\n`
+                <tr>
+                    <td>{val.item}</td>
+                    <td>{val.price}</td>
+                    <td>{val.qty}</td>
+                    <td>{val.qty * val.price}</td>
+                    <td><button className='btn btn-danger' onClick={() => this.delete(val.item)}>X</button></td>
+                </tr>
             )
         })
         return result
     }
 
     onSubmit = async () => {
-        let menuItem = this.itemList.props.value
+        let menuItem = this.state.itemList
         let name = this.name.value
         let companyName = this.companyName.value
-        let companyAddress = this.companyName.value
+        let companyAddress = this.companyAddress.value
         let address = this.address.value
         let email = this.email.value
         let nett = this.nett.value
+
+        menuItem.forEach(function(v) {
+            delete v.item;
+        });
+        menuItem.forEach(function(v) {
+            delete v.price;
+        });
+        menuItem.forEach(function(v) {
+            delete v.name;
+        });
+        console.log(menuItem)
+
+
         if (!name || !address || !email || !nett) {
             return alert('Please fill the form correctly')
         }
@@ -126,36 +180,30 @@ export class Reservation extends Component {
             return alert('Please select menu item')
         }
         try {
-            if (!companyAddress || !companyName) {
-                let res = await axios.post(
-                    'http://localhost:2000/reservation',
-                    {
-                        name,
-                        address,
-                        email,
-                        menuItem,
-                        nett
-                    }
-                )
-                console.log(res)
-                alert('success')
-            } else {
-                let res = await axios.post(
-                    'http://localhost:2000/reservation',
-                    {
-                        name,
-                        address,
-                        email,
-                        menuItem,
-                        nett,
-                        companyName,
-                        companyAddress
-                    }
-                )
-                console.log(res)
-                alert('success')
-            }
+            let res = await axios.post(
+                url + '/reservation',
+                {
+                    name,
+                    address,
+                    email,
+                    menuItem,
+                    nett,
+                    companyName,
+                    companyAddress
+                }
+            )
+            if(res.data.error) return alert(res.data.error)
+            console.log(res)
+            alert('success')
 
+            this.setState({ itemList: [] })
+            this.name.value = ''
+            this.companyName.value = ''
+            this.companyAddress.value = ''
+            this.address.value = ''
+            this.email.value = ''
+            this.nett.value = ''
+            this.componentDidMount()
         } catch (error) {
             console.log(error)
         }
@@ -183,10 +231,12 @@ export class Reservation extends Component {
                                 </div>
                                 <div className='card-title'>
                                     <h3>Company name : </h3>
+                                    <h6> (Optional) </h6>
                                     <input className='form-control' type="text" ref={input => { this.companyName = input }} />
                                 </div>
                                 <div className='card-title'>
                                     <h3>Company address : </h3>
+                                    <h6> (Optional) </h6>
                                     <textarea className='form-control' type='text' ref={input => { this.companyAddress = input }} />
                                 </div>
                                 <div className='card-title'>
@@ -220,14 +270,17 @@ export class Reservation extends Component {
                                             }
                                         </DropdownToggle>
                                         <DropdownMenu style={{ overflow: 'auto', height: 150 }} className='mr-2 w-100'>
-                                            <DropdownItem header>Lauk</DropdownItem>
-                                            {this.renderLauk()}
+                                            <DropdownItem header>MenuSet</DropdownItem>
+                                            {this.renderMenuSet()}
                                             <DropdownItem divider></DropdownItem>
-                                            <DropdownItem header>Tambahan</DropdownItem>
-                                            {this.renderTambahan()}
+                                            <DropdownItem header>MainCourse</DropdownItem>
+                                            {this.renderMainCourse()}
                                             <DropdownItem divider></DropdownItem>
-                                            <DropdownItem header>Paket</DropdownItem>
-                                            {this.renderPaket()}
+                                            <DropdownItem header>SideDish</DropdownItem>
+                                            {this.renderSideDish()}
+                                            <DropdownItem divider></DropdownItem>
+                                            <DropdownItem header>Beverage</DropdownItem>
+                                            {this.renderBeverage()}
                                         </DropdownMenu>
                                     </UncontrolledButtonDropdown>
                                 </div>
@@ -251,6 +304,7 @@ export class Reservation extends Component {
                                                         <th>PRODUCT</th>
                                                         <th>PRICE</th>
                                                         <th>QTY</th>
+                                                        <th>SUM</th>
                                                         <th>ACTION</th>
                                                     </tr>
                                                 </thead>

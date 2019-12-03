@@ -1,0 +1,179 @@
+import React from "react";
+import {
+    Page,
+    Text,
+    View,
+    Document,
+    StyleSheet
+} from "@react-pdf/renderer";
+
+const BORDER_COLOR = '#bfbfbf'
+const BORDER_STYLE = 'solid'
+const COL1_WIDTH = 40
+const COLN_WIDTH = (100 - COL1_WIDTH) / 3
+const styles = StyleSheet.create({
+  body: {
+    padding: 10
+  },
+  table: { 
+    display: "table", 
+    width: "auto", 
+    borderStyle: BORDER_STYLE, 
+    borderColor: BORDER_COLOR,
+    borderWidth: 1, 
+    borderRightWidth: 0, 
+    borderBottomWidth: 0 
+  }, 
+  tableRow: { 
+    margin: "auto", 
+    flexDirection: "row" 
+  }, 
+  tableCol1Header: { 
+    width: COL1_WIDTH + '%', 
+    borderStyle: BORDER_STYLE, 
+    borderColor: BORDER_COLOR,
+    borderBottomColor: '#000',
+    borderWidth: 1, 
+    borderLeftWidth: 0, 
+    borderTopWidth: 0,
+    backgroundColor:'black',
+    color: 'white'
+  },     
+  tableColHeader: { 
+    width: COLN_WIDTH + "%", 
+    borderStyle: BORDER_STYLE, 
+    borderColor: BORDER_COLOR,
+    borderBottomColor: '#000',
+    borderWidth: 1, 
+    borderLeftWidth: 0, 
+    borderTopWidth: 0,
+    backgroundColor:'black',
+    color: 'white'
+  },   
+  tableCol1: { 
+    width: COL1_WIDTH + '%', 
+    borderStyle: BORDER_STYLE, 
+    borderColor: BORDER_COLOR,
+    borderWidth: 1, 
+    borderLeftWidth: 0, 
+    borderTopWidth: 0 
+  },   
+  tableCol: { 
+    width: COLN_WIDTH + "%", 
+    borderStyle: BORDER_STYLE, 
+    borderColor: BORDER_COLOR,
+    borderWidth: 1, 
+    borderLeftWidth: 0, 
+    borderTopWidth: 0 
+  }, 
+  tableCellHeader: {
+    margin: 5, 
+    fontSize: 12,
+    fontWeight: 500
+  },  
+  tableCell: { 
+    margin: 5, 
+    fontSize: 10 
+  }
+});
+
+export function PdfDocument(props) {
+    console.log(props.data)
+
+    
+
+    /*
+        {customerTable: "2", list: Array(4)}
+        customerTable: "2"
+        list: Array(4)
+        0: {menuId: 1, productName: "Fried Chicken", qty: "2", customerTable: "2", productPrice: "10000"}
+        1: {menuId: 6, productName: "MenuSet C", qty: "2", customerTable: "2", productPrice: "21000"}
+        2: {menuId: 4, productName: "MenuSet A", qty: "2", customerTable: "2", productPrice: "15000"}
+        3: {menuId: 8, productName: "Iced sweet tea", qty: "3", customerTable: "2", productPrice: "5000"}
+    */
+
+    let renderItem = (data) => {
+
+        return data.map(val => {
+            return(
+                <View style={styles.tableRow}> 
+                    <View style={styles.tableCol1}> 
+                        <Text style={styles.tableCell}>{val.productName}</Text> 
+                    </View> 
+                    <View style={styles.tableCol}> 
+                        <Text style={styles.tableCell}>{val.qty} pcs</Text> 
+                    </View> 
+                    <View style={styles.tableCol}>
+                        <Text style={styles.tableCell}>Rp. {val.productPrice}</Text> 
+                    </View>
+                    <View style={styles.tableCol}> 
+                        <Text style={styles.tableCell}>RP. {parseInt(val.productPrice) * parseInt(val.qty)}</Text> 
+                    </View> 
+                </View> 
+            )
+        })
+    }
+
+    let totalSum = (data) => {
+        let sum = 0
+        data.map(item => {
+            sum += parseInt(item.productPrice) * parseInt(item.qty)
+        })
+        return sum
+    }
+
+
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
+    console.log(dateTime)
+
+    let ppn = totalSum(props.data.list) * 0.1
+
+    return (
+        <Document>
+            <Page style={styles.body}>
+              <View>
+                <Text>Date :</Text>
+                <Text>{date}</Text>
+                <Text>Time :</Text>
+                <Text>{time}</Text>
+                <Text>Cashier :</Text>
+                <Text>{props.cashier}</Text>
+                <Text>Customer Table :</Text>
+                <Text>{props.customer}</Text>
+
+              </View>
+
+            <View style={styles.table}> 
+                <View style={styles.tableRow}> 
+                <View style={styles.tableCol1Header}> 
+                    <Text style={styles.tableCellHeader}>Product Name</Text> 
+                </View> 
+                <View style={styles.tableColHeader}> 
+                    <Text style={styles.tableCellHeader}>Qty</Text> 
+                </View> 
+                <View style={styles.tableColHeader}> 
+                    <Text style={styles.tableCellHeader}>Product Price</Text> 
+                </View> 
+                <View style={styles.tableColHeader}> 
+                    <Text style={styles.tableCellHeader}>Total</Text> 
+                </View> 
+                </View>
+                {renderItem(props.data.list)}        
+            </View>
+            <View>
+              <Text>Subtotal</Text>
+              <Text>{totalSum(props.data.list)}</Text>
+              <Text>PPN 10%</Text>
+              <Text>{ppn}</Text>
+              <Text>Grand total</Text>
+              <Text>{totalSum(props.data.list) + ppn}</Text>
+
+            </View>
+
+            </Page>
+        </Document>
+    );
+}

@@ -16,6 +16,10 @@ import NewMenu from './NewMenu'
 import Reservation from './Reservation'
 import UpdateProfile from './UpdateProfile'
 import TransactionHistory from './TransactionHistory'
+import EmployeeList from './EmployeeList'
+import NewMenuSuggestion from './NewMenuSuggestion'
+import ReservationList from './ReservationList'
+import MenuList from './MenuList'
 import { connect } from 'react-redux'
 import { keepLogin, keepTableNum } from '../actions/index'
 import '../style/sidebar.css'
@@ -47,7 +51,7 @@ export class App extends Component {
                             <Header />
                         </div>
                         <div>
-                            <Route path='/' exact component={Home} />
+                            <Route path='/' exact component={Login} />
                             <Route path='/login' component={Login} />
                             <Route path='/cashier' component={HomeCashier} />
                             <Route path='/kitchen' component={HomeKitchen} />
@@ -62,6 +66,11 @@ export class App extends Component {
                             <Route path='/reservation' component={Reservation} />
                             <Route path='/updateprofile' component={UpdateProfile} />
                             <Route path='/transactionhistory' component={TransactionHistory} />
+                            <Route path='/employeelist' component={EmployeeList} />
+                            <Route path='/newmenusuggestion' component={NewMenuSuggestion} />
+                            <Route path='/reservationlist' component={ReservationList} />
+                            <Route path='/menulist' component={MenuList} />
+
 
                         </div>
                     </BrowserRouter>

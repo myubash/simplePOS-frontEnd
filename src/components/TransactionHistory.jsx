@@ -4,50 +4,38 @@ import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import '../../node_modules/react-vis/dist/style.css';
 import { XYPlot, VerticalBarSeries, VerticalGridLines, HorizontalGridLines, XAxis, YAxis } from 'react-vis';
+import url from '../support/url'
+import { FaCaretDown,FaCaretUp } from 'react-icons/fa'
 
 export class TransactionHistory extends Component {
 
     state = {
         arrHistory: [],
-        data: []
+        data: [],
+        toggleCaret: false,
+        sort:'id'
     }
 
     async componentDidMount() {
         try {
-            let dor = await axios.get(
-                'http://localhost:2000/orderhistory'
+            let res = await axios.get(
+                url + '/orderhistory'
             )
-            this.setState({ arrHistory: dor.data })
+            if(res.data.error) return alert(res.data.error)
+            this.setState({ arrHistory: res.data.list })
             let jedor = this.state.arrHistory.map(val => {
-                return val.history.list.map(item => {
-                    return { x: item.productName, y: item.qty }
-                })
+                    return { x: val.productName, y: parseInt(val.qty) }
             })
-            let masuk = []
-            function puss(item) {
-                masuk.push(...item)
-            }
-            jedor.forEach(puss)
-            console.log(masuk)
-            this.setState({ data: masuk })
-
+            let out = []
+            let keys = ['y']
+            jedor.forEach(function (e) {
+                if (!this[e.x]) out.push(this[e.x] = e);
+                else keys.forEach(k => this[e.x][k] += e[k])
+            }, {})
+            this.setState({ data: out })
         } catch (error) {
             console.log(error)
         }
-    }
-
-    renderList = (table) => {
-        return this.state.arrHistory.map(arr => {
-            if (arr.history.customerTable === table) {
-                return arr.history.list.map(item => {
-                    return (
-                        <p>
-                            {item.productName}, {item.qty} pcs
-                        </p>
-                    )
-                })
-            }
-        })
     }
 
     renderHistory = () => {
@@ -55,20 +43,48 @@ export class TransactionHistory extends Component {
             return (
                 <tr>
                     <td>{arr.id}</td>
-                    <td>Order-{arr.history.id}</td>
-                    <td>Table-{arr.history.customerTable}</td>
-                    <td>{this.renderList(arr.history.customerTable)}</td>
+                    <td>{arr.productName}</td>
+                    <td>{arr.productType}</td>
+                    <td>{arr.productPrice}</td>
+                    <td>{arr.qty}</td>
                 </tr>
             )
         })
     }
 
-    // addData = () => {
+    compareValues = (key, order = 'asc') => {
+        return function innerSort(a, b) {
+        if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+            // property doesn't exist on either object
+            return 0;
+        }
 
-    //     console.log(masuk)
-    //     this.setState({ data: masuk })
-    // }
+        const varA = (isNaN(parseInt(a[key])))
+            ? a[key].toUpperCase() : parseInt(a[key])
+        const varB = (isNaN(parseInt(b[key])))
+            ? b[key].toUpperCase() : parseInt(b[key])
+    
+        // const varA = (typeof a[key] === 'string')
+        //     ? a[key].toUpperCase() : parseInt(a[key]);
+        // const varB = (typeof b[key] === 'string')
+        //     ? b[key].toUpperCase() : parseInt(b[key]);
+    
+        let comparison = 0;
+        if (varA > varB) {
+            comparison = 1;
+        } else if (varA < varB) {
+            comparison = -1;
+        }
+        return (
+            (order === 'desc') ? (comparison * -1) : comparison
+        );
+        };
+    }
 
+    onSort = (key,order= 'asc') => {
+        let dor = this.state.arrHistory.sort(this.compareValues(key,order ))
+        this.setState({arrHistory:dor,sort:key,toggleCaret: !this.state.toggleCaret})
+    }
 
     render() {
         if (this.props.userName && this.props.userType === "admin") {
@@ -78,7 +94,6 @@ export class TransactionHistory extends Component {
                 )
             }
             else {
-                // (this.addData())
                 return (
                     <div className='container'>
                         <h1 className=' text-center my-4'>Transaction History</h1>
@@ -99,7 +114,7 @@ export class TransactionHistory extends Component {
                                             hideLine
                                             title="Empty Chart Right Here"
                                             tickFormat={v => `${v}!`}
-                                            tickValues={[1, 1.5, 2, 3]} />
+                                            tickValues={[1, 2, 3, 4]} />
                                         <YAxis hideTicks />
                                     </XYPlot>
                                     :
@@ -112,20 +127,88 @@ export class TransactionHistory extends Component {
                                     </XYPlot>
                             }
                         </div>
-                        <table className='table table-hover'>
-                            <thead>
-                                <tr className='text-center'>
-                                    <th>No</th>
-                                    <th>Order-ID</th>
-                                    <th>Customer-table</th>
-                                    <th colSpan='2'>Order list</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody className='text-center'>
-                                {this.renderHistory()}
-                            </tbody>
-                        </table>
+                        <div style={{ overflow: 'auto', maxHeight: '30vh' }}>
+                            <table className='table table-hover'>
+                                <thead style={{ position: 'sticky', top: 0 }}>
+                                    <tr className='text-center'>
+                                        <th >
+                                            ID 
+                                            {
+                                                this.state.toggleCaret && this.state.sort === 'id'
+                                                ?
+
+                                                    <FaCaretUp onClick={() =>this.onSort('id','desc')}/>
+
+                                                :
+
+                                                    <FaCaretDown onClick={() =>this.onSort('id','asc')}/>
+                                            }
+                                        
+                                        </th>
+                                        <th>
+                                            Product Name
+                                            {
+                                                this.state.toggleCaret && this.state.sort === 'productName'
+                                                ?
+
+                                                    <FaCaretUp onClick={() =>this.onSort('productName','desc')}/>
+
+                                                :
+
+                                                    <FaCaretDown onClick={() =>this.onSort('productName','asc')}/>
+
+                                            }
+                                        </th>
+                                        <th>
+                                            Product Type
+                                            {
+                                                this.state.toggleCaret && this.state.sort === 'productType'
+                                                ?
+
+                                                    <FaCaretUp onClick={() =>this.onSort('productType','desc')}/>
+
+                                                :
+
+                                                    <FaCaretDown onClick={() =>this.onSort('productType','asc')}/>
+
+                                            }
+                                        </th>
+                                        <th>
+                                            Product Price
+                                            {
+                                                this.state.toggleCaret && this.state.sort === 'productPrice'
+                                                ?
+
+                                                    <FaCaretUp onClick={() =>this.onSort('productPrice','desc')}/>
+
+                                                :
+
+                                                    <FaCaretDown onClick={() =>this.onSort('productPrice','asc')}/>
+
+                                            }
+                                        </th>
+                                        <th >
+                                            Qty
+                                            {
+                                                this.state.toggleCaret && this.state.sort === 'qty'
+                                                ?
+
+                                                    <FaCaretUp onClick={() =>this.onSort('qty','desc')}/>
+
+                                                :
+
+                                                    <FaCaretDown onClick={() =>this.onSort('qty','asc')}/>
+
+                                            }
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody className='text-center'>
+                                    {this.renderHistory()}
+                                </tbody>
+                            </table>
+                        </div>
 
                     </div>
                 )

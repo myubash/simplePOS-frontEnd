@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Row, Col, Card, CardBody, CardFooter } from 'reactstrap'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import url from '../support/url'
 
 export class OrderListKitchen extends Component {
 
@@ -14,41 +15,62 @@ export class OrderListKitchen extends Component {
     async componentDidMount() {
         try {
             let res = await axios.get(
-                'http://localhost:2000/orders',
-                { params: { cooked: false } }
+                url + '/order/kitchen',
             )
-            console.log(res)
-            this.setState({ arrOrder: res.data })
+            if(res.data.error) return alert(res.data.error)
+            var list = res.data.list
+            let data = []
+            let dor = res.data.list.forEach(val => {
+                data.push(val.customerTable)
+            })
+            let jedor = [...new Set(data)]
+            var dataCustList = []
+            jedor.forEach((val) => {
+                var dataCust = {}
+                dataCust['customerTable'] = val
+                dataCust['list'] = []
+                var temp = []
+                list.forEach((dataList) => {
+                    if(val == dataList.customerTable){
+                        temp.push(dataList)
+                    }
+                })
+                dataCust['list'] = temp
+                dataCustList.push(dataCust)
+            })
+            console.log(dataCustList)
+            this.setState({ arrOrder: dataCustList })
+
         } catch (error) {
             console.log(error)
         }
     }
 
-    onDelete = async (id) => {
+    onDelete = async (customerTable) => {
         try {
             let res = await axios.delete(
-                'http://localhost:2000/orders/' + id
+                url + '/order/kitchen/' + customerTable
             )
+            if(res.data.error) return alert(res.data.error)
             Swal.fire({
                 type: 'success',
-                title: 'Delete id-' + id + ' success'
+                title: 'Delete customer table-' + customerTable + ' success'
             })
             this.componentDidMount()
         } catch (error) {
             console.log(error)
         }
-
     }
 
-    onDone = async (id) => {
+    onDone = async (customerTable) => {
         try {
             let res = await axios.patch(
-                'http://localhost:2000/orders/' + id,
-                { cooked: true }
+                url + '/order/kitchen/' + customerTable
             )
+            if(res.data.error) return alert(res.data.error)
             Swal.fire({
                 type: 'success',
-                title: 'Order id-' + id + ' done',
+                title: 'Order customer table-' + customerTable + ' done',
                 timer: 700
             })
             this.componentDidMount()
@@ -64,14 +86,13 @@ export class OrderListKitchen extends Component {
                     <Card >
                         <div className='ml-2 mt-2'>
                             <h4 >Customer {val.customerTable}</h4>
-                            <h6>(OrderId - {val.id})</h6>
                         </div>
-                        <CardBody className='itemKitchen px-3 py-1'>
+                        <CardBody className=' px-3 py-1'>
                             {this.renderListOrder(val.customerTable)}
                         </CardBody>
                         <CardFooter className='d-flex'>
-                            <button className='btn btn-danger' onClick={() => this.onDelete(val.id)}>Decline order</button>
-                            <button className='btn btn-success ml-auto px-5' onClick={() => this.onDone(val.id)}> DONE</button>
+                            <button className='btn btn-danger' onClick={() => this.onDelete(val.customerTable)}>Decline order</button>
+                            <button className='btn btn-success ml-auto px-5' onClick={() => this.onDone(val.customerTable)}> DONE</button>
                         </CardFooter>
                     </Card>
                 </Col>

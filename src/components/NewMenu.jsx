@@ -3,57 +3,116 @@ import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { UncontrolledButtonDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 import axios from 'axios';
+import url from '../support/url'
 
 export class NewMenu extends Component {
     state = {
         productType: '',
         photoName: '',
-        file: null
+        file: null,
+        type: []
     }
 
     upload = (e) => {
         e.preventDefault()
-        let photoProduct = this.photoProduct.files[0]
+        let productPhoto = this.productPhoto.files[0]
         this.setState({
-            photoName: photoProduct.name,
-            file: URL.createObjectURL(photoProduct)
+            photoName: productPhoto.name,
+            file: URL.createObjectURL(productPhoto)
         })
+    }
+
+    cancelUploadPhoto = e => {
+        e.preventDefault();
+        this.productPhoto = null;
+        this.setState({
+            photoName: "",
+            file: null
+        });
+    };
+
+    async componentDidMount() {
+        try {
+            let type = await axios.get(url+'/producttype')
+            if(type.data.error) return alert(type.data.error)
+            this.setState({type: type.data.list})
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     onSubmit = async (e) => {
         e.preventDefault()
+        
+
+        let formData = new FormData()
+
         let productName = this.productName.value
         let productDescription = this.productDescription.value
         let productIngredients = this.productIngredients.value
-        let productPhoto = this.state.photoName
         let productEstPrice = this.productEstPrice.value
         let productType = this.state.productType
-        if (!productName || !productDescription || !productIngredients || !productEstPrice) {
+        let productPhoto = null
+        if(this.productPhoto) productPhoto = this.productPhoto.files[0]
+        if (!productName || !productDescription || !productIngredients) {
             return alert('Please fill in the form')
         }
+        if(!isNaN(parseInt(productName))) return alert('Product name is string only')
+        if(isNaN(parseInt(productEstPrice))) return alert('Input estimate price incorrect')
         if (!productPhoto) {
             return alert('Please upload product photo')
         }
         if (!productType) {
             return alert('Please select product type')
         }
+        let getType = this.state.type.filter(val => {
+            return val.productType === productType
+        })
+        productType = getType[0].id
+
+
+        formData.append('productName',productName)
+        formData.append('productDescription',productDescription)
+        formData.append('productIngredients',productIngredients)
+        formData.append('productEstPrice',productEstPrice)
+        formData.append('productType',productType)
+        formData.append('productPhoto',productPhoto)
+
+        // for(var pair of formData.entries()) {
+        //     console.log(pair[0]+ ', '+ pair[1]); 
+        // }
         try {
             let res = await axios.post(
-                'http://localhost:2000/newmenu',
-                {
-                    productName: productName,
-                    productType: productType,
-                    productEstPrice: productEstPrice,
-                    productDescription: productDescription,
-                    productIngredients: productIngredients,
-                    productPhoto: productPhoto
-                }
+                url + '/newmenu',
+                    formData
             )
-            console.log(res)
+            if(res.data.error) return alert(res.data.error)
+            console.log(res.data)
+
+            this.productName.value = ''
+            this.productDescription.value = ''
+            this.productIngredients.value = ''
+            this.productEstPrice.value = ''
+            this.state.productType = ''
+            this.productPhoto = null
+            this.setState({
+                photoName: "",
+                file: null
+            });
+            
             alert('Success')
         } catch (error) {
             console.log(error)
         }
+    }
+
+    renderProductType = () => {
+        return this.state.type.map(val => {
+            return(
+                    <DropdownItem onFocus={() => this.setState({ productType: `${val.productType}` })}>{val.productType}</DropdownItem>
+            )
+        })
+        
     }
 
     render() {
@@ -91,9 +150,19 @@ export class NewMenu extends Component {
                                     }
                                     <div className="input-group mb-3">
                                         <div className="custom-file">
-                                            <input type="file" onChange={this.upload} className="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" ref={input => this.photoProduct = input} />
+                                            <input type="file" onChange={this.upload} className="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" ref={input => this.productPhoto = input} />
                                             <label className="custom-file-label" htmlFor="inputGroupFile01">{this.state.photoName ? this.state.photoName : 'Choose file'}</label>
                                         </div>
+                                        {
+                                            this.state.file
+                                            ?
+                                            <button
+                                            onClick={this.cancelUploadPhoto}
+                                            className="btn btn-danger mt-2 btn-block"
+                                            >Cancel</button>
+                                            :
+                                            null
+                                        }
                                     </div>
                                 </div>
                                 <div className='card-title'>
@@ -118,11 +187,9 @@ export class NewMenu extends Component {
                                             }
                                         </DropdownToggle>
                                         <DropdownMenu className='mr-2 w-100'>
-                                            <DropdownItem onFocus={() => this.setState({ productType: 'Lauk' })}>Lauk</DropdownItem>
-                                            <DropdownItem onFocus={() => this.setState({ productType: 'Paket' })}>Paket</DropdownItem>
-                                            <DropdownItem onFocus={() => this.setState({ productType: 'Tambahan' })}>Tambahan</DropdownItem>
-                                            <DropdownItem divider />
-                                            <DropdownItem disabled>Seasonal</DropdownItem>
+                                            {this.renderProductType()}
+                                            <DropdownItem divider></DropdownItem>
+                                            <DropdownItem className='bg-danger text-light' onFocus={() => this.setState({ productType: '' })}>Cancel</DropdownItem>
                                         </DropdownMenu>
                                     </UncontrolledButtonDropdown>
                                 </div>

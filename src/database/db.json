@@ -9,20 +9,50 @@
     {
       "id": 2,
       "userName": "waiter",
-      "userType": "waiter",
-      "password": "waiter"
+      "password": "waiter",
+      "userType": "waiter"
     },
     {
       "id": 3,
       "userName": "cashier",
-      "userType": "cashier",
-      "password": "cashier"
+      "password": "cashier",
+      "userType": "cashier"
     },
     {
       "id": 4,
       "userName": "kitchen",
-      "userType": "kitchen",
-      "password": "kitchen"
+      "password": "kitchen",
+      "userType": "kitchen"
+    },
+    {
+      "userName": "jedor",
+      "password": "haha",
+      "userType": 3,
+      "id": 5
+    },
+    {
+      "userName": "jedor",
+      "password": "haha",
+      "userType": 3,
+      "id": 6
+    },
+    {
+      "userName": "jedor",
+      "password": "haha",
+      "userType": 3,
+      "id": 7
+    },
+    {
+      "userName": "hahaha",
+      "password": "hahahahaha",
+      "userType": 1,
+      "id": 8
+    },
+    {
+      "userName": "hahaha",
+      "password": "hahahahaha",
+      "userType": 2,
+      "id": 9
     }
   ],
   "employee": [
@@ -33,7 +63,8 @@
       "birthPlace": "waiter",
       "birthDate": "1-1-1111",
       "address": "waiter",
-      "userId": 2
+      "userId": 2,
+      "userType": "waiter"
     },
     {
       "id": 2,
@@ -42,7 +73,8 @@
       "birthPlace": "cashier",
       "birthDate": "1-1-1111",
       "address": "cashier",
-      "userId": 3
+      "userId": 3,
+      "userType": "cashier"
     },
     {
       "id": 3,
@@ -51,7 +83,8 @@
       "birthPlace": "kitchen",
       "birthDate": "1-1-1111",
       "address": "kitchen",
-      "userId": 4
+      "userId": 4,
+      "userType": "kitchen"
     }
   ],
   "menu": [
@@ -82,30 +115,159 @@
       "productType": "Paket",
       "productPrice": "20000",
       "productDescription": "Nasi ditambah ayam bakar"
+    },
+    {
+      "productName": "dor",
+      "productType": "Tambahan",
+      "productPrice": "121212",
+      "productDescription": "dor",
+      "productPhoto": "blackCat.jpg",
+      "id": 5
     }
   ],
-  "orders": [],
+  "orders": [
+    {
+      "list": [
+        {
+          "productName": "Ayam bakar",
+          "productPrice": "12000",
+          "productId": 2,
+          "productType": "Lauk",
+          "qty": 1
+        }
+      ],
+      "customerTable": "2",
+      "cooked": false,
+      "id": 1
+    },
+    {
+      "list": [
+        {
+          "productName": "Ayam goreng",
+          "productPrice": "10000",
+          "productId": 1,
+          "productType": "Lauk",
+          "qty": 12
+        }
+      ],
+      "customerTable": "3",
+      "cooked": true,
+      "id": 2
+    }
+  ],
   "newmenu": [
     {
-      "productName": "nama",
-      "productType": "Lauk",
-      "productEstPrice": "123",
-      "productDescription": "desc",
-      "productIngredients": "ing",
+      "productName": "dor",
+      "productType": "Tambahan",
+      "productEstPrice": "121212",
+      "productDescription": "dor",
+      "productIngredients": "dor",
       "productPhoto": "blackCat.jpg",
-      "id": 1
+      "accepted": false,
+      "pending": false,
+      "id": 2,
+      "rejected": true
+    },
+    {
+      "productName": "dor",
+      "productType": "Tambahan",
+      "productEstPrice": "121212",
+      "productDescription": "dor",
+      "productIngredients": "dor",
+      "productPhoto": "blackCat.jpg",
+      "accepted": true,
+      "pending": false,
+      "id": 3
     }
   ],
   "reservation": [
     {
-      "name": "name",
-      "address": "add",
-      "email": "mail",
-      "menuItem": "item: Paket A  X 10\nitem: Ayam bakar  X 10\n",
-      "nett": "10",
-      "companyName": "cname",
-      "companyAddress": "cname",
+      "name": "dor",
+      "address": "dor",
+      "email": "dor@dor.dor",
+      "menuItem": [
+        {
+          "item": "Nasi",
+          "price": "5000",
+          "qty": "100"
+        }
+      ],
+      "nett": "222",
+      "companyName": "dor",
+      "companyAddress": "dor",
+      "accepted": false,
+      "isCompany": true,
       "id": 1
+    },
+    {
+      "name": "dor",
+      "address": "dor",
+      "email": "dor@dor.dor",
+      "menuItem": [
+        {
+          "item": "Ayam goreng",
+          "price": "10000",
+          "qty": "100"
+        }
+      ],
+      "nett": "222",
+      "accepted": false,
+      "companyAddress": null,
+      "isCompany": false,
+      "id": 2
+    },
+    {
+      "name": "haha",
+      "address": "haha",
+      "email": "haha@haha",
+      "menuItem": [
+        {
+          "item": "Ayam goreng",
+          "price": "10000",
+          "qty": "10"
+        }
+      ],
+      "nett": "91",
+      "companyName": "haha",
+      "companyAddress": "haha",
+      "accepted": false,
+      "isCompany": true,
+      "id": 3
+    },
+    {
+      "name": "agus",
+      "address": "agus",
+      "email": "agus@haha",
+      "menuItem": [
+        {
+          "item": "Ayam goreng",
+          "price": "10000",
+          "qty": "22"
+        }
+      ],
+      "nett": "12",
+      "accepted": false,
+      "companyAddress": null,
+      "isCompany": false,
+      "id": 4
+    },
+    {
+      "name": "j",
+      "address": "j",
+      "email": "j@j",
+      "menuItem": [
+        {
+          "item": "Ayam goreng",
+          "price": "10000",
+          "qty": "2"
+        }
+      ],
+      "nett": "2",
+      "companyName": "j",
+      "companyAddress": "j",
+      "accepted": false,
+      "isCompany": true,
+      "id": 5
     }
   ],
   "orderhistory": [
@@ -170,6 +332,29 @@
         "id": 1
       },
       "id": 3
+    },
+    {
+      "history": {
+        "list": [
+          {
+            "productName": "Ayam goreng",
+            "productPrice": "10000",
+            "productId": 1,
+            "productType": "Lauk",
+            "qty": 20
+          },
+          {
+            "productName": "Paket A",
+            "productPrice": "20000",
+            "productId": 4,
+            "productType": "Paket",
+            "qty": 10
+          }
+        ],
+        "customerTable": "5",
+        "id": 1
+      },
+      "id": 4
     }
   ]
 }

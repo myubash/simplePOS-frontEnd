@@ -1,16 +1,19 @@
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import url from '../support/url'
+
+
 export let loginData = (_username, _password) => {
     return (dispatch) => {
-        axios.get(
-            'http://localhost:2000/users', {
-                params: {
-                    username: _username,
-                    password: _password
-                }
+
+        axios.post(
+            url + '/login', {
+                userName: _username,
+                password: _password
             }
+
         ).then(res => {
-            if (res.data.length === 0) {
+            if (res.data.error) {
                 Swal.fire(
                     'Login gagal',
                     'Username atau password salah',
@@ -18,14 +21,14 @@ export let loginData = (_username, _password) => {
                 )
             } else {
                 let {
-                    id,
                     userName,
-                    userType
-                } = res.data[0]
+                    userType,
+                    avatar
+                } = res.data.userDetail
                 localStorage.setItem('userData', JSON.stringify({
-                    userId: id,
                     userName: userName,
-                    userType: userType
+                    userType: userType,
+                    avatar
                 }))
                 Swal.fire(
                     'Welcome back, ' + userName,
@@ -35,9 +38,9 @@ export let loginData = (_username, _password) => {
                 dispatch({
                     type: 'loginSuccess',
                     payload: {
-                        userId: id,
                         userName: userName,
-                        userType: userType
+                        userType: userType,
+                        avatar
                     }
                 })
             }
@@ -50,7 +53,7 @@ export let logoutData = () => {
     return {
         type: "logoutSuccess",
         payload: {
-            userId: 0,
+            avatar: '',
             userName: '',
             userType: ''
         }
@@ -61,9 +64,26 @@ export const keepLogin = (userData) => {
     return {
         type: "loginSuccess",
         payload: {
-            userId: userData.userId,
+            avatar: userData.avatar,
             userName: userData.userName,
             userType: userData.userType
+        }
+    }
+}
+
+export const changeUserAvatar = (userName, userType, avatar) => {
+    localStorage.removeItem('userData')
+    localStorage.setItem('userData', JSON.stringify({
+        userName: userName,
+        userType: userType,
+        avatar
+    }))
+    return {
+        type: 'loginSuccess',
+        payload: {
+            userName,
+            userType,
+            avatar
         }
     }
 }

@@ -7,6 +7,10 @@ import {
 import axios from 'axios';
 import { addTableNum } from '../actions/index'
 import Swal from 'sweetalert2';
+import url from '../support/url'
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { PdfDocument } from "./Invoice";
+
 
 
 export class Checkout extends Component {
@@ -15,27 +19,50 @@ export class Checkout extends Component {
         sum: 0,
         arrItem: [],
         toggleModal: false,
-        orderId: 0
+        totalSum: 0
     }
     tableNum = (num) => {
         this.props.addTableNum(num)
     }
 
-    componentDidMount() {
-        axios.get(
-            'http://localhost:2000/orders',
-            { params: { cooked: true } }
-        )
-            .then(res => {
-                this.setState({ arrOrder: res.data })
+    async componentDidMount() {
+        try {
+            let res = await axios.get(
+                url + '/order/cashier',
+            )
+            if(res.data.error) return alert(res.data.error)
+            var list = res.data.list
+            let data = []
+            let dor = res.data.list.forEach(val => {
+                data.push(val.customerTable)
             })
+            let jedor = [...new Set(data)]
+            var dataCustList = []
+            jedor.forEach((val) => {
+                var dataCust = {}
+                dataCust['customerTable'] = val
+                dataCust['list'] = []
+                var temp = []
+                list.forEach((dataList) => {
+                    if(val == dataList.customerTable){
+                        temp.push(dataList)
+                    }
+                })
+                dataCust['list'] = temp
+                dataCustList.push(dataCust)
+            })
+            console.log(dataCustList)
+            this.setState({ arrOrder: dataCustList })
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     renderListOrder = (customer) => {
         return this.state.arrOrder.map(order => {
             if (order.customerTable === customer) {
                 return order.list.map(item => {
-                    // sum = sum + (parseInt(item.productPrice) * parseInt(item.qty))
                     return (<div className='d-flex py-2'>
                         <div>
                             <span className='mr-2'>{item.productName}</span> X <span className='ml-2'>{item.qty} pcs</span>
@@ -69,71 +96,90 @@ export class Checkout extends Component {
     }
 
     onSubmit = async () => {
-        let array = [...this.state.arrOrder]
-        let index = array.map(function (e) { return e.id; }).indexOf(this.state.orderId);
-        let dor = this.state.arrOrder[index]
-        delete dor.cooked
-        console.log(dor)
-        try {
-            let resp = await axios.post(
-                'http://localhost:2000/orderhistory',
-                { history: dor }
-            )
-            let res = await axios.delete(
-                'http://localhost:2000/orders/' + this.state.orderId
-            )
-            Swal.fire({
-                type: 'success',
-                title: 'Checkout success',
-                timer: 700
-            })
-            // console.log(res)
-            this.setState({ orderId: 0, toggleModal: !this.state.toggleModal })
-            this.componentDidMount()
-        } catch (error) {
-            console.log(error)
-        }
+
+        
+
+        // let array = []
+        // array.push(this.state.arrItem[0].list)
+        // array[0].forEach(function(v) {
+        //     delete v.productName;
+        // });
+        // array[0].forEach(function(v) {
+        //     delete v.productPrice;
+        // });
+        // let data = array[0].reduce(
+        //     (acc, obj) => [...acc, Object.values(obj).map(y => parseInt(y))],
+        //     []
+        // );
+        // let address = url + '/order/cashier/' + data[0][2]
+        // console.log(address)
+        // try {
+        //     let address = url + '/order/cashier/' + data[0][2]
+        //     let resp = await axios.post(
+        //         address,
+        //         { list: data }
+        //     )
+        //     if(resp.data.error) return alert(resp.data.error)
+        //     Swal.fire({
+        //         type: 'success',
+        //         title: 'Checkout success',
+        //         timer: 700
+        //     })
+        //     this.setState({ orderId: 0, toggleModal: !this.state.toggleModal })
+        //     this.componentDidMount()
+        //     console.log(resp)
+        // } catch (error) {
+        //     console.log(error)
+        // }
     }
 
     renderOrder = () => {
 
         let result = this.state.arrOrder.map(order => {
-
+            let sum = this.totalSum(order.customerTable)
             return (
-                <Col xs='11' className='my-3 ' key={order.id}>
-                    <Card className='bg-success text-light' onClick={() => this.openModal(order, order.id)}>
-                        <Row>
-                            <Col xs='4' className='ml-3 mt-3 mb-0'>
-                                <h3 >Customer {order.customerTable}</h3>
-                            </Col>
-                            <Col xs='7' className=' ml-auto mr-3 mt-1 mb-0 d-flex justify-content-end'>
-                                <h6>(OrderId - {order.id})</h6>
-                            </Col>
-                        </Row>
-                        <CardBody className='m-0'>
-                            {this.renderListOrder(order.customerTable)}
-                            <div className='d-flex border-top border-light my-2'>
-                                <div>
-                                    <h3>Total price :</h3>
+                <PDFDownloadLink
+                    className='col-10 p-0 m-3'
+                    document={<PdfDocument data={order} cashier={this.props.userName} customer={order.customerTable}  />}
+                    fileName= {Date.now() + "-invoice.pdf"}
+                    style={{
+                    textDecoration: "none",
+                    color: "#4a4a4a",
+                    backgroundColor: "#f2f2f2",
+                    border: "1px solid #4a4a4a"
+                    }}
+                >
+                    <Col xs='12' className='p-0'  key={order.id}>
+                        <Card className='bg-success text-light' onClick={() => this.openModal(order, sum)}>
+                            <Row>
+                                <Col xs='4' className='ml-3 mt-3 mb-0'>
+                                    <h3 >Customer {order.customerTable}</h3>
+                                </Col>
+                            </Row>
+                            <CardBody className='m-0'>
+                                {this.renderListOrder(order.customerTable)}
+                                <div className='d-flex border-top border-light my-2'>
+                                    <div>
+                                        <h3>Total price :</h3>
+                                    </div>
+                                    <div className='ml-auto'>
+                                        <h3>
+                                            Rp. {sum}
+                                        </h3>
+                                    </div>
                                 </div>
-                                <div className='ml-auto'>
-                                    <h3>
-                                        Rp. {this.totalSum(order.customerTable)}
-                                    </h3>
-                                </div>
-                            </div>
-                        </CardBody>
-                    </Card>
-
-                </Col>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                </PDFDownloadLink>
             )
         })
         return result
     }
 
-    openModal = (data, id) => {
+    openModal = (data, sum) => {
         // console.log(this.state.arrItem)
-        this.setState({ arrItem: [{ ...data }], toggleModal: !this.state.toggleModal, orderId: id })
+        this.setState({ arrItem: [{ ...data }], toggleModal: !this.state.toggleModal, totalSum: sum })
     }
 
     toggle = () => {
@@ -146,7 +192,6 @@ export class Checkout extends Component {
             return val.list.map(item => {
                 let sum = parseInt(item.qty) * parseInt(item.productPrice)
                 return (
-                    <Row className='container-fluid mx-auto'>
                         <Col xs='12' className='border-bottom border-top border-dark p-0'>
                             <div className='d-flex py-4'>
                                 <div className='pt-1 ml-2'>
@@ -156,11 +201,10 @@ export class Checkout extends Component {
                                     {item.qty} pcs X Rp. {item.productPrice}
                                 </div>
                                 <div className='ml-auto pt-1'>
-                                    Total : Rp. {sum}
+                                    : Rp. {sum}
                                 </div>
                             </div>
                         </Col>
-                    </Row>
                 )
             })
         })
@@ -184,10 +228,16 @@ export class Checkout extends Component {
                                     <Modal size='md' isOpen={this.state.toggleModal} toggle={this.toggle} className={this.props.className}>
                                         <ModalHeader toggle={this.toggle} className="px-auto ">Checkout confirmation</ModalHeader>
                                         <ModalBody>
+                                        <Row className='container-fluid mx-auto'>
+
                                             {this.renderConfirmation()}
+                                            <div className='ml-auto pt-1'>
+                                                Total : Rp. {this.state.totalSum}
+                                            </div>
+                                            </Row>
                                         </ModalBody>
                                         <ModalFooter>
-                                            <Button color="primary" onClick={this.onSubmit}>Confirm</Button>
+                                            <Button color="info" onClick={this.onSubmit}>Confirm</Button>
                                             <Button color="danger" onClick={this.toggle}>Cancel</Button>
                                         </ModalFooter>
                                     </Modal>
@@ -195,7 +245,6 @@ export class Checkout extends Component {
                                 :
                                 ''
                         }
-
                     </div>
                 )
             }

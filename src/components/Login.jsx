@@ -34,7 +34,6 @@ export class Login extends Component {
                 <Redirect to="/cashier" />
             )
         } else if (this.props.userType === "admin") {
-            console.log('asu')
             return (
                 <Redirect to="/admin" />
             )

@@ -3,9 +3,9 @@ import {
 } from 'redux'
 
 let initState = {
-    userId: 0,
     userName: '',
     userType: '',
+    avatar: ''
 }
 
 let initStateTableNum = {
@@ -16,11 +16,11 @@ let userAuth = (state = initState, action) => {
     switch (action.type) {
         case "loginSuccess":
             return {
-                ...state, userId: action.payload.userId, userName: action.payload.userName, userType: action.payload.userType
+                ...state, avatar: action.payload.avatar, userName: action.payload.userName, userType: action.payload.userType
             }
             case "logoutSuccess":
                 return {
-                    ...state, userId: action.payload.userId, userName: action.payload.userName, userType: action.payload.userType
+                    ...state, avatar: action.payload.avatar, userName: action.payload.userName, userType: action.payload.userType
                 }
                 default:
                     return state;
