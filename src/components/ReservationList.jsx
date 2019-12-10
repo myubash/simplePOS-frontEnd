@@ -135,6 +135,15 @@ export class ReservationList extends Component {
 
     render() {
         if (this.props.userName && this.props.userType === "admin") {
+            if(!this.state.reservation.length || !this.state.reservationCompany.length){
+                return(
+                    <div className='text-center'>
+                        <h1>
+                            Loading...
+                        </h1>
+                    </div>
+                )
+            }
             return (
                 <div>
                     {

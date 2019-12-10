@@ -7,6 +7,7 @@ import {
     StyleSheet
 } from "@react-pdf/renderer";
 
+
 const BORDER_COLOR = '#bfbfbf'
 const BORDER_STYLE = 'solid'
 const COL1_WIDTH = 40
@@ -77,10 +78,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export function PdfDocument(props) {
-    console.log(props.data)
-
-    
+export function PdfDocument(props) {    
 
     /*
         {customerTable: "2", list: Array(4)}
@@ -104,10 +102,10 @@ export function PdfDocument(props) {
                         <Text style={styles.tableCell}>{val.qty} pcs</Text> 
                     </View> 
                     <View style={styles.tableCol}>
-                        <Text style={styles.tableCell}>Rp. {val.productPrice}</Text> 
+                        <Text style={styles.tableCell}>Rp {val.productPrice}</Text> 
                     </View>
                     <View style={styles.tableCol}> 
-                        <Text style={styles.tableCell}>RP. {parseInt(val.productPrice) * parseInt(val.qty)}</Text> 
+                        <Text style={styles.tableCell}>Rp {parseInt(val.productPrice) * parseInt(val.qty)}</Text> 
                     </View> 
                 </View> 
             )
@@ -121,13 +119,11 @@ export function PdfDocument(props) {
         })
         return sum
     }
-
-
-    var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date+' '+time;
-    console.log(dateTime)
+    console.log(props.data.list)
+    // var today = new Date();
+    // var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    // var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    // var dateTime = date+' '+time;
 
     let ppn = totalSum(props.data.list) * 0.1
 
@@ -135,10 +131,8 @@ export function PdfDocument(props) {
         <Document>
             <Page style={styles.body}>
               <View>
-                <Text>Date :</Text>
-                <Text>{date}</Text>
-                <Text>Time :</Text>
-                <Text>{time}</Text>
+                <Text>Checkout time :</Text>
+                <Text>{props.dateTime}</Text>
                 <Text>Cashier :</Text>
                 <Text>{props.cashier}</Text>
                 <Text>Customer Table :</Text>
@@ -164,12 +158,17 @@ export function PdfDocument(props) {
                 {renderItem(props.data.list)}        
             </View>
             <View>
-              <Text>Subtotal</Text>
-              <Text>{totalSum(props.data.list)}</Text>
-              <Text>PPN 10%</Text>
-              <Text>{ppn}</Text>
-              <Text>Grand total</Text>
-              <Text>{totalSum(props.data.list) + ppn}</Text>
+              <Text>Subtotal :</Text>
+              <Text>Rp {totalSum(props.data.list)}</Text>
+              <Text>PPN 10% :</Text>
+              <Text>Rp {ppn}</Text>
+              <Text>Grand total :</Text>
+              <Text>Rp {totalSum(props.data.list) + ppn}</Text>
+              <Text>Cash :</Text>
+              <Text>Rp {props.cash}</Text>
+              <Text>Change :</Text>
+              <Text>Rp {props.change}</Text>
+
 
             </View>
 

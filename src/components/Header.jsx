@@ -55,16 +55,16 @@ export class Header extends Component {
               />
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem>
+              <DropdownItem className='headerBtn'>
                 <NavItem>
-                  <NavLink className="nav-link" to="/updateprofile">
+                  <NavLink className="nav-link " to="/updateprofile">
                     Update Profile
                   </NavLink>
                 </NavItem>
               </DropdownItem>
-              <DropdownItem>
+              <DropdownItem className='headerBtn'>
                 <button
-                  className="btn btn-block btn-danger"
+                  className="btn btn-block btn-danger "
                   onClick={this.logoutData}
                 >
                   LOGOUT
@@ -103,16 +103,16 @@ export class Header extends Component {
               />
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem>
+              <DropdownItem className='headerBtn'>
                 <NavItem>
-                  <NavLink className="nav-link" to="/updateprofile">
+                  <NavLink className="nav-link " to="/updateprofile">
                     Update Profile
                   </NavLink>
                 </NavItem>
               </DropdownItem>
-              <DropdownItem>
+              <DropdownItem className='headerBtn'>
                 <button
-                  className="btn btn-block btn-danger"
+                  className="btn btn-block btn-danger "
                   onClick={this.logoutData}
                 >
                   LOGOUT
@@ -136,16 +136,16 @@ export class Header extends Component {
               />
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem>
+              <DropdownItem className='headerBtn'>
                 <NavItem>
-                  <NavLink className="nav-link" to="/updateprofile">
+                  <NavLink className="nav-link " to="/updateprofile">
                     Update Profile
                   </NavLink>
                 </NavItem>
               </DropdownItem>
-              <DropdownItem>
+              <DropdownItem className='headerBtn'>
                 <button
-                  className="btn btn-block btn-danger"
+                  className="btn btn-block btn-danger "
                   onClick={this.logoutData}
                 >
                   LOGOUT
@@ -163,7 +163,7 @@ export class Header extends Component {
               Welcome, {this.props.userName}
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem>
+              <DropdownItem className='headerBtn'>
                 <button
                   className="btn btn-block btn-danger"
                   onClick={this.logoutData}

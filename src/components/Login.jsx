@@ -49,11 +49,11 @@ export class Login extends Component {
                         <form onSubmit={this.onSubmit} className='form-group mb-0'>
                             <div className='card-title'>
                                 <h3>Username : </h3>
-                                <input className='form-control' type="text" ref={input => { this.username = input }} />
+                                <input style={{textAlign:'center'}} className='form-control' type="text" ref={input => { this.username = input }} />
                             </div>
                             <div className='card-title'>
                                 <h3>Password : </h3>
-                                <input className='form-control' type={this.state.cek ? "text" : "password"} ref={input => { this.password = input }} />
+                                <input style={{textAlign:'center'}} className='form-control' type={this.state.cek ? "text" : "password"} ref={input => { this.password = input }} />
                             </div>
                             <button className='m-0 p-0' style={{ opacity: 0 }} onClick={this.onSubmit}>
                             </button>

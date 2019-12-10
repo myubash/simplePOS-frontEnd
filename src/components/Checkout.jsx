@@ -8,8 +8,7 @@ import axios from 'axios';
 import { addTableNum } from '../actions/index'
 import Swal from 'sweetalert2';
 import url from '../support/url'
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import { PdfDocument } from "./Invoice";
+import NumberFormat from 'react-number-format'
 
 
 
@@ -19,13 +18,31 @@ export class Checkout extends Component {
         sum: 0,
         arrItem: [],
         toggleModal: false,
-        totalSum: 0
+        totalSum: 0,
+        time: 1000,
+        seconds: 5
     }
     tableNum = (num) => {
         this.props.addTableNum(num)
     }
 
     async componentDidMount() {
+        this.interval = setInterval(()=>this.getData(), this.state.time);
+        this.myInterval = setInterval(() => {
+            const { seconds } = this.state
+            if (seconds > 0) {
+                this.setState(({ seconds }) => ({
+                    seconds: seconds - 1
+                }))
+            }
+            if (seconds === 0) {
+                    clearInterval(this.myInterval)
+            } 
+        }, 1000)
+        
+    }
+
+    getData = async () => {
         try {
             let res = await axios.get(
                 url + '/order/cashier',
@@ -44,7 +61,7 @@ export class Checkout extends Component {
                 dataCust['list'] = []
                 var temp = []
                 list.forEach((dataList) => {
-                    if(val == dataList.customerTable){
+                    if(val === dataList.customerTable){
                         temp.push(dataList)
                     }
                 })
@@ -58,6 +75,10 @@ export class Checkout extends Component {
             console.log(error)
         }
     }
+    componentWillUnmount() {
+        clearInterval(this.interval);
+        clearInterval(this.myInterval);
+    }
 
     renderListOrder = (customer) => {
         return this.state.arrOrder.map(order => {
@@ -68,7 +89,7 @@ export class Checkout extends Component {
                             <span className='mr-2'>{item.productName}</span> X <span className='ml-2'>{item.qty} pcs</span>
                         </div>
                         <div className='ml-auto'>
-                            = Rp. {parseInt(item.productPrice) * parseInt(item.qty)}
+                            <NumberFormat value={parseInt(item.productPrice) * parseInt(item.qty)} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'Rp '} />
                         </div>
                     </div>
                     )
@@ -95,62 +116,16 @@ export class Checkout extends Component {
         return sum
     }
 
-    onSubmit = async () => {
-
-        
-
-        // let array = []
-        // array.push(this.state.arrItem[0].list)
-        // array[0].forEach(function(v) {
-        //     delete v.productName;
-        // });
-        // array[0].forEach(function(v) {
-        //     delete v.productPrice;
-        // });
-        // let data = array[0].reduce(
-        //     (acc, obj) => [...acc, Object.values(obj).map(y => parseInt(y))],
-        //     []
-        // );
-        // let address = url + '/order/cashier/' + data[0][2]
-        // console.log(address)
-        // try {
-        //     let address = url + '/order/cashier/' + data[0][2]
-        //     let resp = await axios.post(
-        //         address,
-        //         { list: data }
-        //     )
-        //     if(resp.data.error) return alert(resp.data.error)
-        //     Swal.fire({
-        //         type: 'success',
-        //         title: 'Checkout success',
-        //         timer: 700
-        //     })
-        //     this.setState({ orderId: 0, toggleModal: !this.state.toggleModal })
-        //     this.componentDidMount()
-        //     console.log(resp)
-        // } catch (error) {
-        //     console.log(error)
-        // }
-    }
+    
 
     renderOrder = () => {
 
         let result = this.state.arrOrder.map(order => {
             let sum = this.totalSum(order.customerTable)
             return (
-                <PDFDownloadLink
-                    className='col-10 p-0 m-3'
-                    document={<PdfDocument data={order} cashier={this.props.userName} customer={order.customerTable}  />}
-                    fileName= {Date.now() + "-invoice.pdf"}
-                    style={{
-                    textDecoration: "none",
-                    color: "#4a4a4a",
-                    backgroundColor: "#f2f2f2",
-                    border: "1px solid #4a4a4a"
-                    }}
-                >
-                    <Col xs='12' className='p-0'  key={order.id}>
-                        <Card className='bg-success text-light' onClick={() => this.openModal(order, sum)}>
+                    <Col xs='12' className='p-0 m-3'  key={order.id}>
+                        <Link className='nav-link' to={{pathname:'/checkoutconfirmation',customerTable:order.customerTable}}>
+                        <Card className='text-light checkoutBtn'>
                             <Row>
                                 <Col xs='4' className='ml-3 mt-3 mb-0'>
                                     <h3 >Customer {order.customerTable}</h3>
@@ -164,14 +139,14 @@ export class Checkout extends Component {
                                     </div>
                                     <div className='ml-auto'>
                                         <h3>
-                                            Rp. {sum}
+                                            <NumberFormat value={sum} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'Rp '} />
                                         </h3>
                                     </div>
                                 </div>
                             </CardBody>
                         </Card>
+                        </Link>
                     </Col>
-                </PDFDownloadLink>
             )
         })
         return result
@@ -198,10 +173,10 @@ export class Checkout extends Component {
                                     {item.productName}
                                 </div>
                                 <div className='ml-auto pt-1'>
-                                    {item.qty} pcs X Rp. {item.productPrice}
+                                    {item.qty} pcs X Rp {item.productPrice}
                                 </div>
                                 <div className='ml-auto pt-1'>
-                                    : Rp. {sum}
+                                    : Rp {sum}
                                 </div>
                             </div>
                         </Col>
@@ -210,10 +185,14 @@ export class Checkout extends Component {
         })
     }
 
+    onRetry = () => {
+        this.setState({seconds:5})
+        this.componentDidMount()
+    }
+
 
 
     render() {
-
         if (this.props.userName && this.props.userType === "cashier") {
             if (this.state.arrOrder.length > 0) {
                 return (
@@ -221,37 +200,24 @@ export class Checkout extends Component {
                         <Row className='justify-content-center'>
                             {this.renderOrder()}
                         </Row>
-                        {
-                            this.state.arrItem.length > 0
-                                ?
-                                <div>
-                                    <Modal size='md' isOpen={this.state.toggleModal} toggle={this.toggle} className={this.props.className}>
-                                        <ModalHeader toggle={this.toggle} className="px-auto ">Checkout confirmation</ModalHeader>
-                                        <ModalBody>
-                                        <Row className='container-fluid mx-auto'>
-
-                                            {this.renderConfirmation()}
-                                            <div className='ml-auto pt-1'>
-                                                Total : Rp. {this.state.totalSum}
-                                            </div>
-                                            </Row>
-                                        </ModalBody>
-                                        <ModalFooter>
-                                            <Button color="info" onClick={this.onSubmit}>Confirm</Button>
-                                            <Button color="danger" onClick={this.toggle}>Cancel</Button>
-                                        </ModalFooter>
-                                    </Modal>
-                                </div>
-                                :
-                                ''
-                        }
                     </div>
                 )
             }
-            else {
-                return (<div className='container mt-4 checkoutOption'>
-                    <h1>EMPTY</h1>
-                </div>
+            if(!this.state.arrOrder.length){
+                const { seconds } = this.state
+                return (
+                    <div className='container text-center mt-4'>
+                        { seconds === 0
+                            ? <h1>
+                                No order yet...
+                                <h6 className='m-4'>
+                                <p className='textBack' onClick={this.onRetry}>Retry get data</p>
+                                <p className='textBack' onClick={() => {this.props.history.push('/cashier')}}>Back to home</p>
+                                </h6>
+                            </h1>
+                            : <h1>Loading... Timeout: {seconds < 10 && seconds > 1 ? `0${seconds} seconds` : seconds === 1 ? `${seconds} second` : `${seconds} seconds`}</h1>
+                        }
+                    </div>
                 )
             }
         } else if (this.props.userType === "kitchen") {

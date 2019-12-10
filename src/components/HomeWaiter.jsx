@@ -14,7 +14,7 @@ export class HomeWaiter extends Component {
                     <Row className="justify-content-around mt-5 container-fluid">
                         <Col xs='5' className='mt-5 pt-5'>
                             <Card>
-                                <Link to='/table'>
+                                <Link to='/table' className='nav-link homeMenu'>
                                     <CardBody className="text-center">
                                         <FaUtensils style={{ height: '100px', width: '100px' }} />
                                         <h1 className="my-3 text-dark">ORDER</h1>

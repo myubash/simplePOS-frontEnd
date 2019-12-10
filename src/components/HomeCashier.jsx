@@ -17,7 +17,7 @@ export class HomeCashier extends Component {
                     <Row className="justify-content-around mt-5 container-fluid">
                         <Col xs='3' className='mt-5 pt-5'>
                             <Card>
-                                <Link to='/table'>
+                                <Link to='/table' className='nav-link homeMenu'>
                                     <CardBody className="text-center">
                                         <FaUtensils style={{ height: '100px', width: '100px' }} />
                                         <h1 className="my-3 text-dark">ORDER</h1>
@@ -27,8 +27,8 @@ export class HomeCashier extends Component {
                         </Col>
                         <Col xs='3' className='mt-5 pt-5'>
                             <Card>
-                                <Link to='/reservation'>
-                                    <CardBody className='text-center'>
+                                <Link to='/reservation'  className='nav-link homeMenu'>
+                                    <CardBody  className='text-center px-0'>
                                         <GoCalendar style={{ height: '100px', width: '100px' }} />
                                         <h1 className="my-3 text-dark">RESERVATION</h1>
                                     </CardBody>
@@ -37,7 +37,7 @@ export class HomeCashier extends Component {
                         </Col>
                         <Col xs='3' className='mt-5 pt-5'>
                             <Card>
-                                <Link to="/checkout">
+                                <Link to="/checkout" className='nav-link homeMenu'>
                                     <CardBody className='text-center'>
                                         <FaMoneyBillWave style={{ height: '100px', width: '100px' }} />
                                         <h1 className="my-3 text-dark">CHECKOUT</h1>

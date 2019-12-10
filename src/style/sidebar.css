@@ -90,3 +90,69 @@
     height: 70vh;
     padding: 2px;
 }
+
+.textBack{
+    color: blue
+}
+
+.textBack:hover{
+    color: darkblue;
+    text-decoration: underline;
+}
+
+
+
+button:hover{
+    transition: 0.3s;
+    box-shadow: 0 0.5em 0.5em -0.4em black;
+    transform: translateY(-0.25em);
+}
+
+button:active{
+    transition: 0s;
+    box-shadow: none;
+    transform: unset;
+}
+
+.headerBtn:hover{
+    all: revert;
+    box-shadow: none;
+    transform: unset;
+}
+
+.tableBtn{
+    background-color: rgb(167, 190, 63);
+}
+
+.tableBtn:hover{
+    background-color: rgb(129, 128, 35);
+    box-shadow: 0 0.5em 0.5em -0.4em black;
+    transform: translateY(-0.25em);
+    border-radius: 5px;
+}
+.checkoutBtn{
+    background-color: rgb(219, 173, 73) !important;
+}
+
+.checkoutBtn:hover{
+    background-color: rgb(185, 146, 61) !important;
+    box-shadow: 0 0.5em 0.5em -0.4em black;
+    transform: translateY(-0.25em);
+    border-radius: 5px;
+}
+
+body{
+    background-color: rgb(218, 216, 216);
+}
+
+.homeMenu:hover {
+    background-color: rgb(209, 205, 205);
+    box-shadow: 0 0.5em 0.5em -0.4em black;
+    transform: translateY(-0.25em);
+}
+
+.homeMenu:active {
+    background-color: white;
+    box-shadow: unset;
+    transform: unset;
+}

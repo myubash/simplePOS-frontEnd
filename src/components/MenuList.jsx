@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import url from '../support/url'
-import { FaCaretDown,FaCaretUp } from 'react-icons/fa'
+import { FaCaretDown,FaCaretUp,FaBars } from 'react-icons/fa'
 
 import {
     ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem
@@ -236,6 +236,15 @@ export class MenuList extends Component {
 
     render() {
         if (this.props.userName && this.props.userType === "admin") {
+            if(!this.state.arrMenu.length){
+                return(
+                    <div className='text-center'>
+                        <h1>
+                            Loading...
+                        </h1>
+                    </div>
+                )
+            }
             return (
                 <div className='app'>
                     <div className='sidebar-container'>
@@ -247,7 +256,7 @@ export class MenuList extends Component {
                                 </div>
                                 :
                                 <div className='d-flex h-100 justify-content-start'>
-                                    <button onClick={this.toggleSidebar} className='btn btn-primary btn-block p-0'> Search product </button>
+                                    <button onClick={this.toggleSidebar} className='btn btn-primary btn-block p-2'> <FaBars size={30}/> </button>
                                 </div>
 
                         }

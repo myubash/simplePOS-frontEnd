@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import url from '../support/url'
 import { parse } from 'url'
+import Swal from 'sweetalert2'
 
 let urlLokal = `http://localhost:2000/newmenu/`
 
@@ -35,6 +36,11 @@ export class NewMenuSuggestion extends Component {
             .then(res => {
                 if(res.data.error) return alert(res.data.error)
                 console.log(res)
+                Swal.fire({
+                    title:'Please confirm accepted menu',
+                    showConfirmButton:false,
+                    timer: 800
+                })
                 this.componentDidMount()
             })
             .catch(err => {
@@ -53,6 +59,11 @@ export class NewMenuSuggestion extends Component {
             .then(res => {
                 if(res.data.error) return alert(res.data.error)
                 console.log(res)
+                Swal.fire({
+                    title:'Please confirm rejected menu',
+                    showConfirmButton:false,
+                    timer: 800
+                })
                 this.componentDidMount()
             })
             .catch(err => {
@@ -71,6 +82,11 @@ export class NewMenuSuggestion extends Component {
             .then(res => {
                 if(res.data.error) return alert(res.data.error)
                 console.log(res)
+                Swal.fire({
+                    title:'Change cancelled',
+                    showConfirmButton:false,
+                    timer: 500
+                })
                 this.componentDidMount()
             })
             .catch(err => {
@@ -132,7 +148,7 @@ export class NewMenuSuggestion extends Component {
                         <td style={{wordBreak:'break-all'}}>{val.productIngredients}</td>
                         <td>Rejected</td>
                         <td>
-                            <button className='btn btn-danger mr-2' onClick={() => this.onDelete(val.id,val.productPhoto)} >DELETE</button>
+                            <button className='btn btn-danger mr-2' onClick={() => this.onDelete(val.id,val.productPhoto,val.productName)} >DELETE</button>
                             <button className='btn btn-warning mr-2' onClick={() => this.onCancel(val.id)} >CANCEL</button>
                         </td>
                     </tr>
@@ -147,28 +163,51 @@ export class NewMenuSuggestion extends Component {
     onConfirm = async (id, name, type, photo, price, desc) => {
         id = parseInt(id)
         price = parseInt(price)
-
-        try {
-            let res = await axios.post(
-                url + '/newmenu/confirm/' + id,
-                {
-                    productName: name,
-                    productType: type,
-                    productPrice: price,
-                    productDescription: desc,
-                    productPhoto: photo
-                }
-            )
-            if(res.data.error) return alert(res.data.error)
-            console.log(res.data)
-            this.componentDidMount()
-        } catch (error) {
-            console.log(error)
+        let alert = await Swal.fire({
+            title:'Are you sure?',
+            text: `${name} will be added to current menu`,
+            showCancelButton:true
+        })
+        if(!alert.value){
+            return Swal.fire({
+                title: 'Confirmation cancelled'
+            })
         }
+            try {
+                let res = await axios.post(
+                    url + '/newmenu/confirm/' + id,
+                    {
+                        productName: name,
+                        productType: type,
+                        productPrice: price,
+                        productDescription: desc,
+                        productPhoto: photo
+                    }
+                )
+                if(res.data.error) return alert(res.data.error)
+                console.log(res.data)
+                Swal.fire({
+                    title:`${name} added to menu`,
+                    icon:'success'
+                })
+                this.componentDidMount()
+            } catch (error) {
+                console.log(error)
+            }
     }
 
-    onDelete = async (id,photo) => {
+    onDelete = async (id,photo,name) => {
         console.log(photo)
+        let alert = await Swal.fire({
+            title:'Are you sure?',
+            text: `${name} will be added to current menu`,
+            showCancelButton:true
+        })
+        if(!alert.value){
+            return Swal.fire({
+                title: 'Confirmation cancelled'
+            })
+        }
         try {
             let res = await axios.post(
                 url + '/newmenu/delete/' + id,
@@ -178,6 +217,10 @@ export class NewMenuSuggestion extends Component {
             )
             if(res.data.error) return alert(res.data.error)
             console.log(res.data)
+            Swal.fire({
+                title:`${name} cleared from suggestion`,
+                icon:'success'
+            })
             this.componentDidMount()
         } catch (error) {
             console.log(error)

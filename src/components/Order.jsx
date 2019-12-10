@@ -19,6 +19,7 @@ import axios from "axios";
 import { delTableNum } from "../actions/index";
 import Swal from "sweetalert2";
 import { Transition } from "react-transition-group";
+import NumberFormat from 'react-number-format'
 
 import url from "../support/url";
 
@@ -63,7 +64,7 @@ export class Order extends Component {
     qty: 0,
     modal: false,
     isOpen: false
-  };
+    };
 
   // SIDEBAR FRAME
   renderLinks = () => {
@@ -157,7 +158,6 @@ export class Order extends Component {
       (acc, obj) => [...acc, Object.values(obj).map(y => y)],
       []
     );
-    console.log(data)
 
     axios
       .post(url + "/order", {
@@ -226,7 +226,7 @@ export class Order extends Component {
             >
               <CardTitle>
                 <h4>{product.productName.toUpperCase()}</h4>
-                <p>Price: Rp. {product.productPrice}</p>
+                <p>Price: <NumberFormat value={product.productPrice} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'Rp '} /></p>
               </CardTitle>
             </Card>
           </Col>
@@ -257,7 +257,7 @@ export class Order extends Component {
             >
               <CardTitle>
                 <h4>{product.productName.toUpperCase()}</h4>
-                <p>Price: Rp. {product.productPrice}</p>
+                <p>Price: <NumberFormat value={product.productPrice} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'Rp '} /></p>
               </CardTitle>
             </Card>
           </Col>
@@ -288,7 +288,7 @@ export class Order extends Component {
             >
               <CardTitle>
                 <h4>{product.productName.toUpperCase()}</h4>
-                <p>Price: Rp. {product.productPrice}</p>
+                <p>Price: <NumberFormat value={product.productPrice} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'Rp '} /></p>
               </CardTitle>
             </Card>
           </Col>
@@ -319,7 +319,7 @@ export class Order extends Component {
             >
               <CardTitle>
                 <h4>{product.productName.toUpperCase()}</h4>
-                <p>Price: Rp. {product.productPrice}</p>
+                <p>Price: <NumberFormat value={product.productPrice} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'Rp '} /></p>
               </CardTitle>
             </Card>
           </Col>
@@ -397,6 +397,10 @@ export class Order extends Component {
     });
     if (dor.length > 0) {
       let sum = parseInt(dor[0].qty) + parseInt(this.state.qty);
+      if(sum > 100) {
+        this.setState({qty:0})
+        return alert('Qty cannot be more than 100 pcs')
+      }
       let array = [...this.state.arrOrder];
       let index = array
         .map(function(e) {
@@ -405,6 +409,13 @@ export class Order extends Component {
         .indexOf(id);
       if (index === -1) return alert("No index");
       array.splice(index, 1);
+      Swal.fire({
+        title:`${name} qty updated to ${sum} pcs`,
+        timer: 1000,
+        showConfirmButton: false,
+        width:'50%',
+        height:'40%'
+      })
       return this.setState({
         arrOrder: [
           ...array,
@@ -413,14 +424,20 @@ export class Order extends Component {
             productPrice: price,
             productId: id,
             productType: type,
-            customerTable: parseInt(this.props.tableNum),
+            customerTable: this.props.tableNum,
             qty: sum
           }
         ],
         qty: 0
       });
     }
-
+    Swal.fire({
+      title:`${qty} pcs ${name} added`,
+      timer: 1000,
+      showConfirmButton: false,
+      width:'50%',
+      height:'40%'
+    })
     return this.setState({
       arrOrder: [
         ...this.state.arrOrder,
@@ -429,7 +446,7 @@ export class Order extends Component {
           productPrice: price,
           productId: id,
           productType: type,
-          customerTable: parseInt(this.props.tableNum),
+          customerTable: this.props.tableNum,
           qty
         }
       ],
@@ -460,12 +477,13 @@ export class Order extends Component {
     let result = this.state.productDetail.map(product => {
       return (
         <Row className="mt-3 mb-3">
-          <Col xs="3">
+          <Col xs="3" className='text-center'>
             {
               product.productPhoto === 'null'
               ?
               <CardImg
                 left={true.toString()}
+                style={{width:200,height:180}}
                 className="mx-auto my-2"
                 src={darwin}
                 alt=""
@@ -473,7 +491,8 @@ export class Order extends Component {
               :
               <CardImg
               left={true.toString()}
-              className="mx-auto my-2"
+                style={{width:200,height:180}}
+                className="mx-auto my-2"
               src={urlLokal+product.productPhoto}
               alt=""
               />
@@ -519,8 +538,10 @@ export class Order extends Component {
                       -
                     </button>
                     <input
+                      style={{textAlign:'center'}}
                       type="text"
                       min="0"
+                      maxLength='3'
                       onChange={e => this.inputQty(e)}
                       value={this.state.qty}
                     />
@@ -564,6 +585,7 @@ export class Order extends Component {
     this.props.delTableNum();
   };
 
+
   // RENDER COMPONENT
   render() {
     if (
@@ -571,6 +593,20 @@ export class Order extends Component {
       (this.props.userType === "cashier" || this.props.userType === "waiter") &&
       this.props.tableNum
     ) {
+
+      if(!this.state.arrMenu.length){
+        return(
+            <div className='text-center'>
+                <h1>
+                    Loading...
+                </h1>
+            </div>
+        )
+    }
+      if(this.props.tableNum.split('-')[0] === 'takeaway' && !this.props.tableNum.split('-')[1]){
+        this.props.delTableNum()
+        return <Redirect to="/table" />;
+      }
       return (
         <div className="app">
           <div className="sidebar-container">
@@ -587,7 +623,7 @@ export class Order extends Component {
               <div className="d-flex h-100 justify-content-start ">
                 <button
                   onClick={this.toggleSidebar}
-                  className="btn btn-primary btn-block p-0"
+                  className="btn btn-primary btn-block p-1"
                 >
                   Order List
                 </button>

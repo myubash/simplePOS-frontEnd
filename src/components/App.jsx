@@ -20,6 +20,7 @@ import EmployeeList from './EmployeeList'
 import NewMenuSuggestion from './NewMenuSuggestion'
 import ReservationList from './ReservationList'
 import MenuList from './MenuList'
+import CheckoutConfirmation from './CheckoutConfirmation'
 import { connect } from 'react-redux'
 import { keepLogin, keepTableNum } from '../actions/index'
 import '../style/sidebar.css'
@@ -70,6 +71,7 @@ export class App extends Component {
                             <Route path='/newmenusuggestion' component={NewMenuSuggestion} />
                             <Route path='/reservationlist' component={ReservationList} />
                             <Route path='/menulist' component={MenuList} />
+                            <Route path='/checkoutconfirmation' component={CheckoutConfirmation} />
 
 
                         </div>

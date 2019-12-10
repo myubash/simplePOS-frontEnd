@@ -16,7 +16,7 @@ export class HomeAdmin extends Component {
                     <Row className="justify-content-around mt-0 container-fluid">
                         <Col xs='5' className='mt-5 pt-5'>
                             <Card>
-                                <Link to='/register'>
+                                <Link to='/register' className='nav-link homeMenu'>
                                     <CardBody className="text-center">
                                         <FaPencilAlt style={{ height: '100px', width: '100px' }} />
                                         <h1 className="my-3 text-dark">REGISTER USER</h1>
@@ -26,7 +26,7 @@ export class HomeAdmin extends Component {
                         </Col>
                         <Col xs='5' className='mt-5 pt-5'>
                             <Card>
-                                <Link to='/transactionhistory'>
+                                <Link to='/transactionhistory' className='nav-link homeMenu'>
                                     <CardBody className="text-center">
                                         <FaHistory style={{ height: '100px', width: '100px' }} />
                                         <h1 className="my-3 text-dark">TRANSACTION HISTORY</h1>
@@ -36,7 +36,7 @@ export class HomeAdmin extends Component {
                         </Col>
                         <Col xs='5' className='mt-5 pt-5'>
                             <Card>
-                                <Link to='/employeelist'>
+                                <Link to='/employeelist' className='nav-link homeMenu'>
                                     <CardBody className="text-center">
                                         <FaUsers style={{ height: '100px', width: '100px' }} />
                                         <h1 className="my-3 text-dark">EMPLOYEE LIST</h1>
@@ -46,7 +46,7 @@ export class HomeAdmin extends Component {
                         </Col>
                         <Col xs='5' className='mt-5 pt-5'>
                             <Card>
-                                <Link to='/newmenusuggestion'>
+                                <Link to='/newmenusuggestion' className='nav-link homeMenu'>
                                     <CardBody className="text-center">
                                         <MdRestaurantMenu style={{ height: '100px', width: '100px' }} />
                                         <h1 className="my-3 text-dark">NEW MENU SUGGESTION</h1>
@@ -56,7 +56,7 @@ export class HomeAdmin extends Component {
                         </Col>
                         <Col xs='5' className='mt-5 pt-5'>
                             <Card>
-                                <Link to='/reservationlist'>
+                                <Link to='/reservationlist' className='nav-link homeMenu'>
                                     <CardBody className="text-center">
                                         <FaChair style={{ height: '100px', width: '100px' }} />
                                         <h1 className="my-3 text-dark">RESERVATION LIST</h1>
@@ -66,7 +66,7 @@ export class HomeAdmin extends Component {
                         </Col>
                         <Col xs='5' className='mt-5 pt-5'>
                             <Card>
-                                <Link to='/menulist'>
+                                <Link to='/menulist' className='nav-link homeMenu'>
                                     <CardBody className="text-center">
                                         <FaListUl style={{ height: '100px', width: '100px' }} />
                                         <h1 className="my-3 text-dark">MENU LIST</h1>

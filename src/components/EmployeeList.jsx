@@ -19,6 +19,7 @@ class EmployeeList extends Component {
         )
             .then(res => {
                 if(res.data.error) return alert(res.data.error)
+                console.log(res.data.list)
                 this.setState({ employeeList: res.data.list })
             })
             .catch(err => {

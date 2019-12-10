@@ -9,10 +9,29 @@ import url from '../support/url'
 export class OrderListKitchen extends Component {
 
     state = {
-        arrOrder: []
+        arrOrder: [],
+        time: 1000,
+        seconds: 5
     }
 
     async componentDidMount() {
+        this.interval = setInterval(()=>this.getData(), this.state.time);
+        this.myInterval = setInterval(() => {
+            const { seconds } = this.state
+            if (seconds > 0) {
+                this.setState(({ seconds }) => ({
+                    seconds: seconds - 1
+                }))
+            }
+            if (seconds === 0) {
+                    clearInterval(this.myInterval)
+
+            } 
+        }, 1000)
+
+    }
+
+    getData = async () => {
         try {
             let res = await axios.get(
                 url + '/order/kitchen',
@@ -29,22 +48,32 @@ export class OrderListKitchen extends Component {
                 var dataCust = {}
                 dataCust['customerTable'] = val
                 dataCust['list'] = []
+                dataCust['name'] = null
                 var temp = []
+
                 list.forEach((dataList) => {
                     if(val == dataList.customerTable){
                         temp.push(dataList)
+                        // if(dataList.customerTable.split('-').length === 2){
+                        //     dataCust.name = dataList.customerTable.split('-')[1]
+                        // }
                     }
+                    
                 })
                 dataCust['list'] = temp
                 dataCustList.push(dataCust)
             })
             console.log(dataCustList)
             this.setState({ arrOrder: dataCustList })
-
         } catch (error) {
             console.log(error)
         }
     }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
 
     onDelete = async (customerTable) => {
         try {
@@ -54,9 +83,9 @@ export class OrderListKitchen extends Component {
             if(res.data.error) return alert(res.data.error)
             Swal.fire({
                 type: 'success',
-                title: 'Delete customer table-' + customerTable + ' success'
+                title: 'Delete customer ' + customerTable + ' success'
             })
-            this.componentDidMount()
+            this.getData()
         } catch (error) {
             console.log(error)
         }
@@ -70,10 +99,10 @@ export class OrderListKitchen extends Component {
             if(res.data.error) return alert(res.data.error)
             Swal.fire({
                 type: 'success',
-                title: 'Order customer table-' + customerTable + ' done',
+                title: 'Order customer' + customerTable + ' done',
                 timer: 700
             })
-            this.componentDidMount()
+            this.getData()
         } catch (error) {
             console.log(error)
         }
@@ -119,15 +148,40 @@ export class OrderListKitchen extends Component {
         })
     }
 
+    onRetry = () => {
+        this.setState({seconds:5})
+        this.componentDidMount()
+    }
+
     render() {
         if (this.props.userName && this.props.userType === "kitchen") {
-            return (
-                <div className='container'>
-                    <Row className='align-content-between mt-4 '>
-                        {this.state.arrOrder.length === 0 ? <h1>EMPTY</h1> : this.renderOrder()}
-                    </Row>
-                </div>
-            )
+            if(this.state.arrOrder.length){
+                return (
+                    <div className='container'>
+                        <Row className='align-content-between mt-4 '>
+                            {this.renderOrder()}
+                        </Row>
+                    </div>
+                )
+            }
+            if(!this.state.arrOrder.length){
+                const { seconds } = this.state
+                return (
+                    <div className='container text-center mt-4'>
+                        { seconds === 0
+                            ? <h1>
+                                No order yet...
+                                <h6 className='m-4'>
+                                <p className='textBack' onClick={this.onRetry}>Retry get data</p>
+                                <p className='textBack' onClick={() => {this.props.history.push('/cashier');clearInterval(this.interval)}}>Back to home</p>
+                                </h6>
+                            </h1>
+                            : <h1>Loading... Timeout: {seconds < 10 && seconds > 1 ? `0${seconds} seconds` : seconds === 1 ? `${seconds} second` : `${seconds} seconds`}</h1>
+                        }
+                    </div>
+                )
+            }
+            
         } else if (this.props.userType === "cashier") {
             return (
                 <Redirect to='/cashier' />

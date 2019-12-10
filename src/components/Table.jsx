@@ -2,7 +2,11 @@ import React, { Component } from 'react'
 import { Redirect, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import {
-    Row, Col,
+    Row, Col,Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    Button
 } from 'reactstrap';
 import { addTableNum } from '../actions/index'
 import { FaPlus } from 'react-icons/fa'
@@ -11,11 +15,23 @@ import { FaPlus } from 'react-icons/fa'
 export class Table extends Component {
 
     state = {
-        num: 0
+        num: 0,
+        modal: false
     }
 
     tableNum = (num) => {
         this.props.addTableNum(num)
+    }
+
+    onTakeaway = () => {
+        this.props.addTableNum(`takeaway-${this.name.value}`)
+        this.props.history.push({pathname:'/order',state:{name: this.name.value}})
+    }
+
+    toggle = () => {
+        this.setState(prevState => ({
+            modal: !prevState.modal
+        }));
     }
 
 
@@ -31,7 +47,7 @@ export class Table extends Component {
                                 <h1 className='mt-2 text-center border-bottom border-primary pb-2'>Takeaway</h1>
                                 <Col xs='12' className='mt-2 takeaway'>
                                     <Link to='/order'>
-                                        <button style={{ height: 100, width: '95%' }} onClick={() => this.tableNum('takeaway-1')} className='m-2'></button>
+                                        <button style={{ height: 100, width: '95%' }} onClick={() => this.tableNum('takeaway')} className='m-2'></button>
                                     </Link>
                                 </Col>
                             </Col> */}
@@ -40,71 +56,97 @@ export class Table extends Component {
                                 <Row className='container-fluid justify-content-start mt-2 pl-2 ml-2 w-100'>
                                     <Col xs='2' className='my-2 mx-auto'>
                                         <Link to='/order'>
-                                            <button style={{ height: 100, width: 140 }} onClick={() => this.tableNum('1')}>1</button>
+                                            <button className='tableBtn' style={{ height: 100, width: 140 }} onClick={() => this.tableNum('1')}>1</button>
                                         </Link>
                                     </Col>
                                     <Col xs='2' className='my-2 mx-auto'>
                                         <Link to='/order'>
-                                            <button style={{ height: 100, width: 140 }} onClick={() => this.tableNum('2')}>2</button>
+                                            <button className='tableBtn' style={{ height: 100, width: 140 }} onClick={() => this.tableNum('2')}>2</button>
                                         </Link>
                                     </Col>
                                     <Col xs='2' className='my-2 mx-auto'>
                                         <Link to='/order'>
-                                            <button style={{ height: 100, width: 140 }} onClick={() => this.tableNum('3')}>3</button>
+                                            <button className='tableBtn' style={{ height: 100, width: 140 }} onClick={() => this.tableNum('3')}>3</button>
                                         </Link>
                                     </Col>
                                     <Col xs='2' className='my-2 mx-auto'>
                                         <Link to='/order'>
-                                            <button style={{ height: 100, width: 140 }} onClick={() => this.tableNum('4')}>4</button>
+                                            <button className='tableBtn' style={{ height: 100, width: 140 }} onClick={() => this.tableNum('4')}>4</button>
                                         </Link>
                                     </Col>
                                     <Col xs='2' className='my-2 mx-auto'>
                                         <Link to='/order'>
-                                            <button style={{ height: 100, width: 140 }} onClick={() => this.tableNum('5')}>5</button>
+                                            <button className='tableBtn' style={{ height: 100, width: 140 }} onClick={() => this.tableNum('5')}>5</button>
                                         </Link>
                                     </Col>
                                     <Col xs='2' className='my-2 mx-auto'>
                                         <Link to='/order'>
-                                            <button style={{ height: 100, width: 140 }} onClick={() => this.tableNum('6')}>6</button>
+                                            <button className='tableBtn' style={{ height: 100, width: 140 }} onClick={() => this.tableNum('6')}>6</button>
                                         </Link>
                                     </Col>
                                     <Col xs='2' className='my-2 mx-auto'>
                                         <Link to='/order'>
-                                            <button style={{ height: 100, width: 140 }} onClick={() => this.tableNum('7')}>7</button>
+                                            <button className='tableBtn' style={{ height: 100, width: 140 }} onClick={() => this.tableNum('7')}>7</button>
                                         </Link>
                                     </Col>
                                     <Col xs='2' className='my-2 mx-auto'>
                                         <Link to='/order'>
-                                            <button style={{ height: 100, width: 140 }} onClick={() => this.tableNum('8')}>8</button>
+                                            <button className='tableBtn' style={{ height: 100, width: 140 }} onClick={() => this.tableNum('8')}>8</button>
                                         </Link>
                                     </Col>
                                     <Col xs='2' className='my-2 mx-auto'>
                                         <Link to='/order'>
-                                            <button style={{ height: 100, width: 140 }} onClick={() => this.tableNum('9')}>9</button>
+                                            <button className='tableBtn' style={{ height: 100, width: 140 }} onClick={() => this.tableNum('9')}>9</button>
                                         </Link>
                                     </Col>
                                     <Col xs='2' className='my-2 mx-auto'>
                                         <Link to='/order'>
-                                            <button style={{ height: 100, width: 140 }} onClick={() => this.tableNum('10')}>10</button>
+                                            <button className='tableBtn' style={{ height: 100, width: 140 }} onClick={() => this.tableNum('10')}>10</button>
                                         </Link>
                                     </Col>
                                     <Col xs='2' className='my-2 mx-auto'>
                                         <Link to='/order'>
-                                            <button style={{ height: 100, width: 140 }} onClick={() => this.tableNum('11')}>11</button>
+                                            <button className='tableBtn' style={{ height: 100, width: 140 }} onClick={() => this.tableNum('11')}>11</button>
                                         </Link>
                                     </Col>
                                     <Col xs='2' className='my-2 mx-auto'>
                                         <Link to='/order'>
-                                            <button style={{ height: 100, width: 140 }} onClick={() => this.tableNum('12')}>12</button>
+                                            <button className='tableBtn' style={{ height: 100, width: 140 }} onClick={() => this.tableNum('12')}>12</button>
                                         </Link>
                                     </Col>
                                 </Row>
-                                {/* <h1 className='mt-2 text-center border-bottom border-primary pb-2'>Takeaway</h1>
+                                {/* <h1 className='mt-2 text-center border-bottom border-primary pb-2'>Takeaway</h1> */}
                                 <div className='text-center m-2'>
-                                    <Link to='/order'>
-                                        <button style={{ height: 100, width: '50%' }} onClick={() => this.tableNum('takeaway-1')} ><FaPlus size={32} /></button>
-                                    </Link>
-                                </div> */}
+                                    {/* <Link to='/order'> */}
+                                        <button className='tableBtn' style={{ height: 100, width: '50%' }} onClick={this.toggle} >{/*<FaPlus size={32} />*/}<h4>Take-away</h4></button>
+                                    {/* </Link> */}
+                                    <Modal
+                                        isOpen={this.state.modal}
+                                        toggle={this.toggle}
+                                        className={this.props.className}
+                                    >
+                                        <ModalHeader
+                                        toggle={this.toggle}
+                                        className="px-auto "
+                                        >
+                                        Input name
+                                        </ModalHeader>
+                                        <ModalBody>
+                                            <input ref={input => {this.name = input}} maxLength={12} style={{textAlign:'center'}} className='form-control' type="text"/>
+                                            <h6 className='form-control border-0 text-dark p-0'>Max 12 characters</h6>
+                                        </ModalBody>
+                                        <ModalFooter>
+                                        {/* <Link to="/table"> */}
+                                            <Button color="primary" onClick={this.onTakeaway}>
+                                            Confirm
+                                            </Button>
+                                        {/* </Link> */}
+                                        <Button color="danger" onClick={this.toggle}>
+                                            Cancel
+                                        </Button>
+                                        </ModalFooter>
+                                    </Modal>
+                                </div>
                             </Col>
                         </Row>
                     </div>

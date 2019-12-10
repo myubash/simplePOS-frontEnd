@@ -178,7 +178,7 @@ export class UpdateProfile extends Component {
         </div>
         <div className="card-title">
           <h3 className="border-bottom border-dark">Password : </h3>
-          <h6>Old password</h6>
+          <h6>Current password</h6>
           <input
           style={{width:'89%'}}
             className="form-inline d-inline"
