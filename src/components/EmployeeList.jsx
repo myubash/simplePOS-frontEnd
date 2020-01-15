@@ -76,7 +76,8 @@ class EmployeeList extends Component {
     render() {
         if (this.props.userName && this.props.userType === "admin") {
             return (
-                <div>
+                <div className='container'>
+                    <h3 className='text-center mt-4'> Employee list </h3>
                     <table className='table table-hover table-striped float text-center mt-4'>
                         <thead className='thead-dark'>
                             <th>EMPLOYEE-ID

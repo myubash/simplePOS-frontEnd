@@ -37,6 +37,7 @@ export class OrderListKitchen extends Component {
                 url + '/order/kitchen',
             )
             if(res.data.error) return alert(res.data.error)
+            // console.log(res.data.list)
             var list = res.data.list
             let data = []
             let dor = res.data.list.forEach(val => {
@@ -134,7 +135,7 @@ export class OrderListKitchen extends Component {
             if (order.customerTable === customer) {
                 return order.list.map(item => {
                     // sum = sum + (parseInt(item.productPrice) * parseInt(item.qty))
-                    return (<div className='d-flex py-2'>
+                    return (<div className='d-flex py-2' onClick={()=>this.onDeleteItem(item.id,item.productName)}>
                         <div>
                             <span className='mr-2'>{item.productName}</span>
                         </div>
@@ -146,6 +147,24 @@ export class OrderListKitchen extends Component {
                 })
             }
         })
+    }
+
+    onDeleteItem = async (id,name) => {
+        let result = await Swal.fire({
+            title:`delete ${name} ?`,
+            showCancelButton:true
+        })
+        if(!result.value){
+            return Swal.fire({
+                title: `Delete ${name} canceled`
+            })
+        }
+
+        let resp = await axios.delete(
+            url+'/deleteitem/'+id
+        )
+        if(resp.data.error) return alert(resp.data.error)
+        
     }
 
     onRetry = () => {

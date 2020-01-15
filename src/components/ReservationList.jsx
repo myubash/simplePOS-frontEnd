@@ -145,7 +145,7 @@ export class ReservationList extends Component {
                 )
             }
             return (
-                <div>
+                <div className='container'>
                     {
                         this.state.reservationCompany.length
                             ?

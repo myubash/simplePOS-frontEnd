@@ -210,7 +210,7 @@ export class Order extends Component {
       if (product.productType === "Main Course") {
         return (
           <Col xs="3">
-            <Card
+            <Button
               onClick={() =>
                 this.addDetail(
                   product.productName,
@@ -222,13 +222,13 @@ export class Order extends Component {
 
                 )
               }
-              className="menuItem my-1"
+              className="menuItem my-1 btn btn-dark"
             >
-              <CardTitle>
+              {/* <CardTitle> */}
                 <h4>{product.productName.toUpperCase()}</h4>
                 <p>Price: <NumberFormat value={product.productPrice} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'Rp '} /></p>
-              </CardTitle>
-            </Card>
+              {/* </CardTitle> */}
+            </Button>
           </Col>
         );
       }
@@ -242,7 +242,7 @@ export class Order extends Component {
       if (product.productType === "Side Dish") {
         return (
           <Col xs="3">
-            <Card
+            <Button
               onClick={() =>
                 this.addDetail(
                   product.productName,
@@ -253,13 +253,13 @@ export class Order extends Component {
                   product.productPhoto
                 )
               }
-              className="menuItem my-1"
+              className="menuItem my-1 btn btn-dark"
             >
-              <CardTitle>
+              {/* <CardTitle> */}
                 <h4>{product.productName.toUpperCase()}</h4>
                 <p>Price: <NumberFormat value={product.productPrice} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'Rp '} /></p>
-              </CardTitle>
-            </Card>
+              {/* </CardTitle> */}
+            </Button>
           </Col>
         );
       }
@@ -273,7 +273,7 @@ export class Order extends Component {
       if (product.productType === "Beverage") {
         return (
           <Col xs="3">
-            <Card
+            <Button
               onClick={() =>
                 this.addDetail(
                   product.productName,
@@ -284,13 +284,13 @@ export class Order extends Component {
                   product.productPhoto
                 )
               }
-              className="menuItem my-1"
+              className="menuItem my-1 btn btn-dark"
             >
-              <CardTitle>
+              {/* <CardTitle> */}
                 <h4>{product.productName.toUpperCase()}</h4>
                 <p>Price: <NumberFormat value={product.productPrice} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'Rp '} /></p>
-              </CardTitle>
-            </Card>
+              {/* </CardTitle> */}
+            </Button>
           </Col>
         );
       }
@@ -304,7 +304,7 @@ export class Order extends Component {
       if (product.productType === "MenuSet") {
         return (
           <Col xs="3">
-            <Card
+            <Button
               onClick={() =>
                 this.addDetail(
                   product.productName,
@@ -315,13 +315,13 @@ export class Order extends Component {
                   product.productPhoto
                 )
               }
-              className="menuItem my-1"
+              className="menuItem my-1 btn btn-dark"
             >
-              <CardTitle>
+              {/* <CardTitle> */}
                 <h4>{product.productName.toUpperCase()}</h4>
                 <p>Price: <NumberFormat value={product.productPrice} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} prefix={'Rp '} /></p>
-              </CardTitle>
-            </Card>
+              {/* </CardTitle> */}
+            </Button>
           </Col>
         );
       }

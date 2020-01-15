@@ -231,7 +231,7 @@ export class NewMenuSuggestion extends Component {
     render() {
         if (this.props.userName && this.props.userType === "admin") {
             return (
-                <div className='container-fluid'>
+                <div className='container'>
                     <h2 className='text-center mt-3'>SUGGESTION LIST</h2>
                     <table  className='table float text-center mt-3'>
                         <thead>
