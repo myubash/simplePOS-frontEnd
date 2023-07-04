@@ -1,50 +1,42 @@
-import axios from 'axios'
 import Swal from 'sweetalert2'
-import url from '../support/url'
+import {xhr} from '../support/xhr'
 
 
 export let loginData = (_username, _password) => {
-    return (dispatch) => {
-
-        axios.post(
-            url + '/login', {
-                userName: _username,
-                password: _password
-            }
-
-        ).then(res => {
-            if (res.data.error) {
-                Swal.fire(
-                    'Login gagal',
-                    'Username atau password salah',
-                    'error'
-                )
-            } else {
-                let {
-                    userName,
-                    userType,
-                    avatar
-                } = res.data.userDetail
-                localStorage.setItem('userData', JSON.stringify({
-                    userName: userName,
-                    userType: userType,
-                    avatar
-                }))
-                Swal.fire(
-                    'Welcome back, ' + userName,
-                    '',
-                    'success'
-                )
-                dispatch({
-                    type: 'loginSuccess',
-                    payload: {
-                        userName: userName,
-                        userType: userType,
-                        avatar
-                    }
-                })
+    return async (dispatch) => {
+      try {
+        const res = await xhr.post ('/login', {
+          username: _username,
+          password: _password
+        })
+        let {
+          username,
+          role,
+        } = res.user
+        localStorage.setItem('userData', JSON.stringify({
+            userName: username,
+            userType: role,
+        }))
+        localStorage.setItem('token', res.token)
+        Swal.fire(
+            'Welcome back, ' + username,
+            '',
+            'success'
+        )
+        dispatch({
+            type: 'loginSuccess',
+            payload: {
+                userName: username,
+                userType: role,
             }
         })
+      } catch (error) {
+        Swal.fire(
+          'Login gagal',
+          'Username atau password salah',
+          'error'
+        )
+      }
     }
 }
 
