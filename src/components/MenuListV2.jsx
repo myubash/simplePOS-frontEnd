@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import {xhr} from '../support/xhr'
-import { FaCaretDown,FaCaretUp,FaBars } from 'react-icons/fa'
+import { xhr } from '../support/xhr'
+import { FaBars } from 'react-icons/fa'
 
 import {
     ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem

@@ -31,11 +31,11 @@ export let loginData = (_username, _password) => {
             }
         })
       } catch (error) {
-        Swal.fire(
-          'Login gagal',
-          'Username atau password salah',
-          'error'
-        )
+        // Swal.fire(
+        //   'Login gagal',
+        //   'Username atau password salah',
+        //   'error'
+        // )
       }
     }
 }
