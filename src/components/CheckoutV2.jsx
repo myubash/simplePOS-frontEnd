@@ -23,9 +23,10 @@ const Checkout = (props) => {
 
   const [arrOrder, setArrOrder] = useState([])
   const [seconds, setSeconds] = useState(5)
-  const time = 1000
+  const time = 100000
 
   useEffect(() => {
+    getData()
     const interval = setInterval(() => getData(), time);
     const myInterval = setInterval(() => {
         if (seconds > 0) {
@@ -84,7 +85,7 @@ const Checkout = (props) => {
       let sum = getTotalSum(order._id)
       return (
         <Col xs='12' className='p-0 m-3'  key={order._id}>
-          <Link className='nav-link' to={{pathname:'/checkoutconfirmation', customerTable: order.table}}>
+          <Link className='nav-link' to={{pathname:'/checkoutconfirmation', id: order._id}}>
             <Card className='text-light checkoutBtn'>
               <Row>
                 <Col xs='4' className='ml-3 mt-3 mb-0'>
