@@ -91,21 +91,20 @@ export function PdfDocument(props) {
     */
 
     let renderItem = (data) => {
-
         return data.map(val => {
             return(
                 <View style={styles.tableRow}> 
                     <View style={styles.tableCol1}> 
-                        <Text style={styles.tableCell}>{val.productName}</Text> 
+                        <Text style={styles.tableCell}>{val.menu.name}</Text> 
                     </View> 
                     <View style={styles.tableCol}> 
-                        <Text style={styles.tableCell}>{val.qty} pcs</Text> 
+                        <Text style={styles.tableCell}>{val.quantity} pcs</Text> 
                     </View> 
                     <View style={styles.tableCol}>
-                        <Text style={styles.tableCell}>Rp {val.productPrice}</Text> 
+                        <Text style={styles.tableCell}>Rp {val.menu.price}</Text> 
                     </View>
                     <View style={styles.tableCol}> 
-                        <Text style={styles.tableCell}>Rp {parseInt(val.productPrice) * parseInt(val.qty)}</Text> 
+                        <Text style={styles.tableCell}>Rp {parseInt(val.menu.price) * parseInt(val.quantity)}</Text> 
                     </View> 
                 </View> 
             )
@@ -114,18 +113,17 @@ export function PdfDocument(props) {
 
     let totalSum = (data) => {
         let sum = 0
-        data.map(item => {
-            sum += parseInt(item.productPrice) * parseInt(item.qty)
+        data.forEach(item => {
+            sum += parseInt(item.menu.price) * parseInt(item.quantity)
         })
-        return sum
+        return parseInt(sum)
     }
-    console.log(props.data.list)
     // var today = new Date();
     // var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     // var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     // var dateTime = date+' '+time;
 
-    let ppn = totalSum(props.data.list) * 0.1
+    let ppn = parseInt(totalSum(props.data.list) * 0.1)
 
     return (
         <Document>

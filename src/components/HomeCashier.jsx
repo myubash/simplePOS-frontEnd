@@ -25,7 +25,7 @@ export class HomeCashier extends Component {
                                 </Link>
                             </Card>
                         </Col>
-                        <Col xs='3' className='mt-5 pt-5'>
+                        {/* <Col xs='3' className='mt-5 pt-5'>
                             <Card>
                                 <Link to='/reservation'  className='nav-link homeMenu'>
                                     <CardBody  className='text-center px-0'>
@@ -34,7 +34,7 @@ export class HomeCashier extends Component {
                                     </CardBody>
                                 </Link>
                             </Card>
-                        </Col>
+                        </Col> */}
                         <Col xs='3' className='mt-5 pt-5'>
                             <Card>
                                 <Link to="/checkout" className='nav-link homeMenu'>

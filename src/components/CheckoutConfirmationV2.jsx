@@ -41,7 +41,6 @@ const CheckoutConfirmation = (props) => {
 
   const renderListOrder = () => {
     return dataOrder.list.map(item => {
-      console.log(item)
       return (
         <div className='d-flex py-2 text-center'>
           <div>
@@ -147,7 +146,7 @@ const CheckoutConfirmation = (props) => {
   };
 
   const onPaid = () => {
-    let change = cash - total
+    let change = parseInt(cash - total)
     if(change < 0) return alert('Insufficient cash')
     setChange(change)
     setPaid(true)
@@ -215,7 +214,10 @@ const CheckoutConfirmation = (props) => {
                   </Col>
                 </Col>
                 <Col xs='12' className='text-center mt-3'>
-                  <button onClick={()=>{onPrint();onSubmit()}} className='m-2 btn btn-success'>Confirm</button>
+                  <button onClick={()=>{
+                    onPrint();
+                    // onSubmit()
+                  }} className='m-2 btn btn-success'>Confirm</button>
                   <button onClick={() => setPaid(false)} className='m-2 btn btn-danger'>Change payment</button>
                   <Link to='/checkout'>
                     <button className='btn btn-danger'>Back</button>

@@ -114,11 +114,11 @@ button:active{
     transform: unset;
 }
 
-.headerBtn:hover{
+/* .headerBtn:hover{
     all: revert;
     box-shadow: none;
     transform: unset;
-}
+} */
 
 .tableBtn{
     background-color: rgb(167, 190, 63);

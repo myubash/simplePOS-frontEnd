@@ -73,7 +73,6 @@ const Checkout = (props) => {
   const getTotalSum = (order_id) => {
     let sum = 0
     const order = arrOrder.find((o) => o._id === order_id)
-    console.log(order)
     order.list.forEach(row => {
       sum += (parseInt(row.menu?.price) * parseInt(row.quantity))
     })

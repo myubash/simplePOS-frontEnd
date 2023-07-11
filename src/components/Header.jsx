@@ -47,21 +47,21 @@ export class Header extends Component {
           <UncontrolledDropdown>
             <DropdownToggle caret nav innavbar={true.toString()}>
               Welcome, {this.props.userName}
-              <img
+              {/* <img
                 className="ml-2"
                 src={this.props.avatar}
                 alt="yeayy"
                 style={{ width: 30, borderRadius: 30 }}
-              />
+              /> */}
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem className='headerBtn'>
+              {/* <DropdownItem className='headerBtn'>
                 <NavItem>
                   <NavLink className="nav-link " to="/updateprofile">
                     Update Profile
                   </NavLink>
                 </NavItem>
-              </DropdownItem>
+              </DropdownItem> */}
               <DropdownItem className='headerBtn'>
                 <button
                   className="btn btn-block btn-danger "
